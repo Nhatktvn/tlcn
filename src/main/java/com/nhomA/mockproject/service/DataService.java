@@ -79,8 +79,7 @@ public class DataService {
             Cart cart = new Cart();
             cart.setCreatedDate(LocalDate.now());
             Identification identification = new Identification();
-            identification.setFirstName("Nguyen");
-            identification.setLastName("Nhat");
+            identification.setFullName("Nguyen Minh Nhat");
             identification.setEmail("minhnhat24112001@gmail.com");
             identification.setPhone("0378025713");
             identification.setBirthDate(LocalDate.parse("2001-11-24"));

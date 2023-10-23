@@ -3,8 +3,7 @@ package com.nhomA.mockproject.dto;
 import java.time.LocalDate;
 
 public class IdentificationDTO {
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private LocalDate birthDate;
     private String phone;
     private String email;
@@ -21,30 +20,22 @@ public class IdentificationDTO {
     public IdentificationDTO() {
     }
 
-    public IdentificationDTO(String firstName, String lastName, LocalDate birthDate, String phone, String email, String urlAvatar) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public IdentificationDTO(String fullName, LocalDate birthDate, String phone, String email, String urlAvatar) {
+        this.fullName = fullName;
         this.birthDate = birthDate;
         this.phone = phone;
         this.email = email;
         this.urlAvatar = urlAvatar;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public LocalDate getBirthDate() {
         return birthDate;

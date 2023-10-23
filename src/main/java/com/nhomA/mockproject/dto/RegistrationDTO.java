@@ -5,12 +5,17 @@ import java.time.LocalDate;
 public class RegistrationDTO {
     private String username;
     private String password;
-    private String firstName;
-    private String lastName;
-
+    private String fullName;
     private String phone;
-    private LocalDate birthDate;
     private String email;
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     public String getPhone() {
         return phone;
@@ -18,14 +23,6 @@ public class RegistrationDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
     }
 
     public String getEmail() {
@@ -52,19 +49,4 @@ public class RegistrationDTO {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 }

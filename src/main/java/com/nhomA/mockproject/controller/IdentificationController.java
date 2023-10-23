@@ -35,13 +35,13 @@ public class IdentificationController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateIdentification(Authentication authentication, @RequestParam("image") MultipartFile multipartFile, @RequestParam("firstName") String firstName,
-                                                  @RequestParam("lastName") String lastName, @RequestParam("birthDate") LocalDate birthDate,
+    public ResponseEntity<?> updateIdentification(Authentication authentication, @RequestParam("image") MultipartFile multipartFile,
+                                                  @RequestParam("fullName") String fullName, @RequestParam("birthDate") LocalDate birthDate,
                                                   @RequestParam("phone") String phone, @RequestParam("email") String email
                                                   ) throws IOException {
         String imageURL = uploadFileService.uploadFile(multipartFile);
         String username = authentication.getName();
-        IdentificationDTO identificationDTO = new IdentificationDTO(firstName,lastName,birthDate,phone,email,imageURL);
+        IdentificationDTO identificationDTO = new IdentificationDTO(fullName,birthDate,phone,email,imageURL);
         try{
             return new ResponseEntity<> (identificationService.updateIdentification(username,identificationDTO), HttpStatus.OK);
         }catch (Exception ex){

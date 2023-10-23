@@ -8,17 +8,27 @@ public class ProductRequestDTO {
     private double discount;
     private double price;
     private String urlImage;
+    private String description;
 
     public ProductRequestDTO() {
     }
 
-    public ProductRequestDTO(String name, Long category_id, int available, double discount, double price, String urlImage) {
+    public ProductRequestDTO(String name, Long category_id, int available, double discount, double price, String urlImage, String description) {
         this.name = name;
         this.category_id = category_id;
         this.available = available;
         this.discount = discount;
         this.price = price;
         this.urlImage = urlImage;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getUrlImage() {

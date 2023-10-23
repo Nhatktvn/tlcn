@@ -11,11 +11,22 @@ public class ProductResponseDTO {
     private int available;
     private double discount;
     private double price;
+
     private String urlImage;
+
     private UserDTO userCreated;
     private UserDTO userUpdated;
     private ZonedDateTime createdDate;
     private ZonedDateTime updatedDate;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Long getId() {
         return id;

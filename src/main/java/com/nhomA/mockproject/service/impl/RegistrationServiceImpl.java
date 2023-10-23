@@ -44,11 +44,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         Cart cart = new Cart();
         cart.setCreatedDate(LocalDate.now());
         Identification identification = new Identification();
-        identification.setFirstName(registrationDTO.getFirstName());
-        identification.setLastName(registrationDTO.getLastName());
+        identification.setFullName(registrationDTO.getFullName());
         identification.setEmail(registrationDTO.getEmail());
         identification.setPhone(registrationDTO.getPhone());
-        identification.setBirthDate(registrationDTO.getBirthDate());
 
         User mappedUser = new User();
         mappedUser.setIdentification(identification);

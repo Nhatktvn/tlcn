@@ -39,8 +39,30 @@ public class User {
 
     @OneToMany(mappedBy = "userUpdated", cascade = CascadeType.ALL)
     private List<Product> updatedProducts;
+
+    @OneToMany(mappedBy = "userCreated", cascade = CascadeType.ALL)
+    private List<Category> createdCategory;
+
+    @OneToMany(mappedBy = "userUpdated", cascade = CascadeType.ALL)
+    private List<Category> updatedCategory;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> addresses;
+
+    public List<Category> getCreatedCategory() {
+        return createdCategory;
+    }
+
+    public void setCreatedCategory(List<Category> createdCategory) {
+        this.createdCategory = createdCategory;
+    }
+
+    public List<Category> getUpdatedCategory() {
+        return updatedCategory;
+    }
+
+    public void setUpdatedCategory(List<Category> updatedCategory) {
+        this.updatedCategory = updatedCategory;
+    }
 
     public List<Product> getCreatedProducts() {
         return createdProducts;

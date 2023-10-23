@@ -26,6 +26,7 @@ public class ProductMapperImpl implements ProductMapper {
         product.setPrice(productRequestDTO.getPrice());
         product.setDiscount(productRequestDTO.getDiscount());
         product.setUrlImage(productRequestDTO.getUrlImage());
+        product.setDescription(productRequestDTO.getDescription());
         return product;
     }
 
@@ -43,6 +44,7 @@ public class ProductMapperImpl implements ProductMapper {
        productResponseDTO.setUpdatedDate(product.getUpdatedDate());
        productResponseDTO.setUserCreated(userMapper.toDTO(product.getUserCreated()));
        productResponseDTO.setUserUpdated(userMapper.toDTO(product.getUserUpdated()));
+       productResponseDTO.setDescription(product.getDescription());
         return productResponseDTO;
     }
 

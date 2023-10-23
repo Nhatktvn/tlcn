@@ -14,11 +14,9 @@ public class Identification {
     private Long id;
     @Column(name = "url_avatar")
     private String urlAvatar;
-    @Column(name = "first_name",length = 100, nullable = false)
-    private String firstName;
-    @Column(name = "last_name",length = 100, nullable = false)
-    private String lastName;
-    @Column(name = "birth_date",length = 100, nullable = false)
+    @Column(name = "full_name",length = 100, nullable = false)
+    private String fullName;
+    @Column(name = "birth_date",length = 100)
     private LocalDate birthDate;
     @Column(name = "email", length = 100, unique = true)
     private String email;
@@ -42,21 +40,12 @@ public class Identification {
         this.id = id;
     }
 
-
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public LocalDate getBirthDate() {

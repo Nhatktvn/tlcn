@@ -5,6 +5,7 @@ import com.nhomA.mockproject.entity.Cart;
 import com.nhomA.mockproject.entity.CartLineItem;
 import com.nhomA.mockproject.entity.Product;
 import com.nhomA.mockproject.entity.User;
+import com.nhomA.mockproject.exception.CartLineItemNotFoundException;
 import com.nhomA.mockproject.exception.CartNotFoundException;
 import com.nhomA.mockproject.exception.VariantProductNotFoundException;
 import com.nhomA.mockproject.mapper.CartLineItemMapper;
@@ -45,7 +46,7 @@ public class CartServiceImpl implements CartService {
         if(emptyProduct.isEmpty()){
             throw new VariantProductNotFoundException("Variant product is not found!");
         }
-        List<CartLineItem> emptyCartLineItem = cartLineItemRepository.findByCartIdAndProductIdAndIsDeleted(cart.getId(),idProduct,false);
+        Optional<CartLineItem> emptyCartLineItem = cartLineItemRepository.findByCartIdAndProductIdAndIsDeleted(cart.getId(),idProduct,false);
         if (emptyCartLineItem.isEmpty()){
             CartLineItem cartLineItem = new CartLineItem();
             cartLineItem.setProduct(emptyProduct.get());
@@ -59,11 +60,39 @@ public class CartServiceImpl implements CartService {
             return cartLineItemMapper.toResponseDTO(saveCartLineItem);
         }
         //create new cart_line_item
-        CartLineItem cartLineItem = emptyCartLineItem.get(0);
+        CartLineItem cartLineItem = emptyCartLineItem.get();
         int quantityNew = cartLineItem.getQuantity() + quantity;
         cartLineItem.setQuantity(quantityNew);
         double priceNew = quantityNew * emptyProduct.get().getPrice() - quantityNew * emptyProduct.get().getPrice() *  emptyProduct.get().getDiscount();
         cartLineItem.setTotalPrice(priceNew);
+        CartLineItem saveCartLineItem = cartLineItemRepository.save(cartLineItem);
+        return cartLineItemMapper.toResponseDTO(saveCartLineItem);
+    }
+    @Transactional
+    @Override
+    public boolean removeProductCart(Long idProduct, String username) {
+        Optional<User> emptyUser =  userRepository.findByUsername(username);
+        User user = emptyUser.get();
+        Cart cart = user.getCart();
+        Optional<CartLineItem> emptyCartLineItem = cartLineItemRepository.findByCartIdAndProductIdAndIsDeleted(cart.getId(),idProduct,false);
+        if(emptyCartLineItem.isEmpty()){
+            throw new CartLineItemNotFoundException("Cart line item not found");
+        }
+        cartLineItemRepository.delete(emptyCartLineItem.get());
+        return true;
+    }
+
+    @Override
+    public CartLineItemResponseDTO updateQuantityProduct(String username, Long idProduct, int quantity) {
+        Optional<User> emptyUser =  userRepository.findByUsername(username);
+        User user = emptyUser.get();
+        Cart cart = user.getCart();
+        Optional<CartLineItem> emptyCartLineItem = cartLineItemRepository.findByCartIdAndProductIdAndIsDeleted(cart.getId(),idProduct,false);
+        if(emptyCartLineItem.isEmpty()){
+            throw new CartLineItemNotFoundException("Cart line item not found");
+        }
+        CartLineItem cartLineItem = emptyCartLineItem.get();
+        cartLineItem.setQuantity(quantity);
         CartLineItem saveCartLineItem = cartLineItemRepository.save(cartLineItem);
         return cartLineItemMapper.toResponseDTO(saveCartLineItem);
     }

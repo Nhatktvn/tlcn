@@ -2,6 +2,7 @@ package com.nhomA.mockproject.entity;
 
 import jakarta.persistence.*;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -17,8 +18,53 @@ public class Category {
     private String urlImage;
     @Column(name = "description", nullable = false)
     private String description;
+    @Column(name = "created_date")
+    private ZonedDateTime createdDate;
+
+    @Column(name = "updated_date")
+    private ZonedDateTime updatedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_created", referencedColumnName = "id")
+    private User userCreated;
+
+    @ManyToOne
+    @JoinColumn(name = "user_updated", referencedColumnName = "id")
+    private User userUpdated;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> products;
+
+    public ZonedDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public ZonedDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(ZonedDateTime updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public User getUserCreated() {
+        return userCreated;
+    }
+
+    public void setUserCreated(User userCreated) {
+        this.userCreated = userCreated;
+    }
+
+    public User getUserUpdated() {
+        return userUpdated;
+    }
+
+    public void setUserUpdated(User userUpdated) {
+        this.userUpdated = userUpdated;
+    }
 
     public String getUrlImage() {
         return urlImage;

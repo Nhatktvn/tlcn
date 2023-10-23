@@ -5,13 +5,14 @@ import com.nhomA.mockproject.service.CategoryService;
 import com.nhomA.mockproject.service.UploadFileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping
 public class CategoryController {
     private final CategoryService categoryService;
     private final UploadFileService uploadFileService;
@@ -39,29 +40,31 @@ public class CategoryController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping
-    public  ResponseEntity<?> createCategory(@RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
+    @PostMapping("/admin/create-category")
+    public  ResponseEntity<?> createCategory(Authentication authentication, @RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
                                              @RequestParam("description") String description) throws IOException {
+        String username = authentication.getName();
         String imageURL = uploadFileService.uploadFile(multipartFile);
         CategoryDTO categoryDTO = new CategoryDTO(name,description,imageURL);
         try {
-            return new ResponseEntity<>(categoryService.createCategory(categoryDTO),HttpStatus.OK);
+            return new ResponseEntity<>(categoryService.createCategory(categoryDTO,username),HttpStatus.OK);
         }catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory (@PathVariable Long id,@RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
+    @PutMapping("/admin/update-category/{id}")
+    public ResponseEntity<?> updateCategory (Authentication authentication,@PathVariable Long id,@RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
                                              @RequestParam("description") String description) throws IOException{
+        String username = authentication.getName();
         String imageURL = uploadFileService.uploadFile(multipartFile);
         CategoryDTO categoryDTO = new CategoryDTO(name,description,imageURL);
         try {
-            return new ResponseEntity<>(categoryService.updateCategoryById(id,categoryDTO),HttpStatus.OK);
+            return new ResponseEntity<>(categoryService.updateCategoryById(username,id,categoryDTO),HttpStatus.OK);
         }catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/delete-category/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long id){
         try {
             return new ResponseEntity<>(categoryService.deleteCategoryById(id),HttpStatus.OK);

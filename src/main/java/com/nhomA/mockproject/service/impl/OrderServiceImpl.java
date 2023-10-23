@@ -103,6 +103,6 @@ public class OrderServiceImpl implements OrderService {
         Order order = emptyOrder.get();
         order.setStatusOrder(emptyStatusOrder.get());
         Order saveOrder = orderRepository.save(order);
-        return orderMapper.toDTO(saveOrder);
+        return orderMapper.toResponseDTO(saveOrder);
     }
 }

@@ -15,8 +15,7 @@ public class IdentificationMapperImpl implements IdentificationMapper {
     @Override
     public Identification toEntity(IdentificationDTO identificationDTO) {
         Identification identification = new Identification();
-        identification.setFirstName(identificationDTO.getFirstName());
-        identification.setLastName(identificationDTO.getLastName());
+        identification.setFullName(identificationDTO.getFullName());
         identification.setBirthDate(identificationDTO.getBirthDate());
         identification.setPhone(identificationDTO.getPhone());
         identification.setEmail(identificationDTO.getEmail());
@@ -27,8 +26,7 @@ public class IdentificationMapperImpl implements IdentificationMapper {
     @Override
     public IdentificationDTO toDTO(Identification identification) {
         IdentificationDTO identificationDTO = new IdentificationDTO();
-        identificationDTO.setFirstName(identification.getFirstName());
-        identificationDTO.setLastName(identification.getLastName());
+        identificationDTO.setFullName(identification.getFullName());
         identificationDTO.setBirthDate(identification.getBirthDate());
         identificationDTO.setPhone(identification.getPhone());
         identificationDTO.setEmail(identification.getEmail());

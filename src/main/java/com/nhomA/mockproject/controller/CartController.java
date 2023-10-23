@@ -18,11 +18,29 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @PostMapping
+    @PostMapping("/add-cart")
     public ResponseEntity<?> addCart(Authentication authentication, @RequestParam("idProduct") Long idProduct, @RequestParam("quantity") int quantity){
         String username = authentication.getName();
         try{
             return new ResponseEntity<> (cartService.addProductToCart(idProduct,quantity,username), HttpStatus.CREATED);
+        }catch (Exception ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping("/delete-product/{idProduct}")
+    public ResponseEntity<?> deleteProduct (Authentication authentication, @PathVariable("IdProduct") Long idProduct){
+        String username = authentication.getName();
+        try{
+            return new ResponseEntity<> (cartService.removeProductCart(idProduct,username), HttpStatus.CREATED);
+        }catch (Exception ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PutMapping("/set-quantity-product/{idProduct}")
+    public ResponseEntity<?> deleteItem (Authentication authentication, @PathVariable("IdProduct") Long idProduct,@RequestParam("quantity") int quantity){
+        String username = authentication.getName();
+        try{
+            return new ResponseEntity<> (cartService.updateQuantityProduct(username,idProduct,quantity), HttpStatus.CREATED);
         }catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

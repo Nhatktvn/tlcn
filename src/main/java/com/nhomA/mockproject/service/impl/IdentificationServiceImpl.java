@@ -34,8 +34,7 @@ public class IdentificationServiceImpl implements IdentificationService {
         Optional<User> emptyUser  = userRepository.findByUsername(username);
         User user = emptyUser.get();
         Identification identification = user.getIdentification();
-        identification.setFirstName(identificationDTO.getFirstName());
-        identification.setLastName(identificationDTO.getLastName());
+        identification.setFullName(identificationDTO.getFullName());
         identification.setBirthDate(identificationDTO.getBirthDate());
         identification.setPhone(identificationDTO.getPhone());
         identification.setEmail(identificationDTO.getEmail());

@@ -3,6 +3,7 @@ package com.nhomA.mockproject.controller;
 import com.nhomA.mockproject.dto.ProductRequestDTO;
 import com.nhomA.mockproject.service.ProductService;
 import com.nhomA.mockproject.service.UploadFileService;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -52,10 +53,10 @@ public class ProductController {
     @PostMapping("/admin/add-product")
     public  ResponseEntity<?> createProduct(Authentication authentication, @RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
                                             @RequestParam("category_id") Long categoryId, @RequestParam("available") int available,
-                                            @RequestParam("discount") double discount, @RequestParam("price") double price) throws IOException {
+                                            @RequestParam("discount") double discount, @RequestParam("price") double price, @RequestParam("description") String description) throws IOException {
         String username = authentication.getName();
         String imageURL = uploadFileService.uploadFile(multipartFile);
-        ProductRequestDTO productRequestDTO = new ProductRequestDTO(name,categoryId,available,discount,price,imageURL);
+        ProductRequestDTO productRequestDTO = new ProductRequestDTO(name,categoryId,available,discount,price,imageURL,description);
         try {
             return new ResponseEntity<>(productService.createProduct(username, productRequestDTO),HttpStatus.OK);
         }catch (Exception ex){
@@ -65,10 +66,10 @@ public class ProductController {
     @PutMapping("/admin/update-product/{id}")
     public ResponseEntity<?> updateProduct (Authentication authentication,@PathVariable Long id, @RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
                                             @RequestParam("category_id") Long categoryId, @RequestParam("available") int available,
-                                            @RequestParam("discount") double discount, @RequestParam("price") double price) throws IOException {
+                                            @RequestParam("discount") double discount, @RequestParam("price") double price, @RequestParam("description") String description) throws IOException {
         String username = authentication.getName();
         String imageURL = uploadFileService.uploadFile(multipartFile);
-        ProductRequestDTO productRequestDTO = new ProductRequestDTO(name,categoryId,available,discount,price,imageURL);
+        ProductRequestDTO productRequestDTO = new ProductRequestDTO(name,categoryId,available,discount,price,imageURL,description);
         try {
             return new ResponseEntity<>(productService.updateProductById(username,id, productRequestDTO),HttpStatus.OK);
         }catch (Exception ex){
