@@ -1,0 +1,21 @@
+package com.nhomA.mockproject.mapper.impl;
+
+import com.nhomA.mockproject.dto.CartLineItemResponseDTO;
+import com.nhomA.mockproject.entity.CartLineItem;
+import com.nhomA.mockproject.mapper.CartLineItemMapper;
+import org.springframework.stereotype.Component;
+
+@Component
+public class CartLineItemMapperImpl implements CartLineItemMapper {
+    @Override
+    public CartLineItemResponseDTO toResponseDTO(CartLineItem cartLineItem) {
+        CartLineItemResponseDTO responseDTO = new CartLineItemResponseDTO();
+        responseDTO.setCartId(cartLineItem.getCart().getId());
+        responseDTO.setProductId(cartLineItem.getProduct().getId());
+        responseDTO.setAddedDate(cartLineItem.getAddedDate());
+        responseDTO.setDeleted(cartLineItem.isDeleted());
+        responseDTO.setQuantity(cartLineItem.getQuantity());
+        responseDTO.setTotalPrice(cartLineItem.getTotalPrice());
+        return responseDTO;
+    }
+}
