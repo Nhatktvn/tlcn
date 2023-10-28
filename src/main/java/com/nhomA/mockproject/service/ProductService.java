@@ -12,4 +12,5 @@ public interface ProductService {
     ProductResponseDTO updateProductById (String uysername,Long id, ProductRequestDTO productRequestDTO);
     Boolean deleteProductById(Long id);
     List<ProductResponseDTO> getProductsByCategory (Long id);
+    List<ProductResponseDTO> searchProduct (String searchName);
 }

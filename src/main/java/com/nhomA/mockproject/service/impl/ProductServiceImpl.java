@@ -111,4 +111,14 @@ public class ProductServiceImpl implements ProductService {
         Category category = existedCategory.get();
         return productMapper.toResponseDTOs(category.getProducts());
     }
+
+    @Override
+    public List<ProductResponseDTO> searchProduct(String searchName) {
+        List<Product> emptyProducts = productRepository.findByNameContaining(searchName);
+        if(emptyProducts.isEmpty()){
+            throw new ProductNotFoundException("Product not found");
+        }
+        List<ProductResponseDTO> productResponseDTOS = productMapper.toResponseDTOs(emptyProducts);
+        return productResponseDTOS;
+    }
 }

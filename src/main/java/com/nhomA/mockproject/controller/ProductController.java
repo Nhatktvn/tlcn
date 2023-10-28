@@ -14,6 +14,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping
+@CrossOrigin
 public class ProductController {
     private final ProductService productService;
     private final UploadFileService uploadFileService;
@@ -23,6 +24,14 @@ public class ProductController {
         this.uploadFileService = uploadFileService;
     }
 
+    @GetMapping("/product/search")
+    public ResponseEntity<?> getProductById(@RequestParam("searchName") String searchName){
+        try {
+            return new ResponseEntity<>(productService.searchProduct(searchName), HttpStatus.OK);
+        }catch (Exception ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @GetMapping("/product/{id}")
     public ResponseEntity<?> getProductById(@PathVariable Long id){
         try {

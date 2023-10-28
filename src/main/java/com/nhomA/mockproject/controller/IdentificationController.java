@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/identification")
+@CrossOrigin
 public class IdentificationController {
     private final IdentificationService identificationService;
     private final UploadFileService uploadFileService;
