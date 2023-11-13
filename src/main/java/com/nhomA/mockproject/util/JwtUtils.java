@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Key;
@@ -15,7 +16,6 @@ import java.util.function.Function;
 
 public class JwtUtils {
     public static final String SECRET = "54455357342478364763268483726487236482638746283764832";
-
 
     public static String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -67,4 +67,5 @@ public class JwtUtils {
     private static Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
 }
