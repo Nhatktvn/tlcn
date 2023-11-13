@@ -9,6 +9,14 @@ public class RegistrationDTO {
     private String phone;
     private String email;
 
+    public RegistrationDTO(String username, String password, String fullName, String phone, String email) {
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+    }
+
     public String getFullName() {
         return fullName;
     }

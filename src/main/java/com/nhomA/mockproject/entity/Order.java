@@ -13,8 +13,10 @@ public class Order {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "address")
-    private String address;
+
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH})
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
     @Column(name = "delivery_time")
     private ZonedDateTime deliveryTime;
     @Column(name = "name", nullable = false)
@@ -28,6 +30,14 @@ public class Order {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "status_order", referencedColumnName = "id")
     private StatusOrder statusOrder;
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public StatusOrder getStatusOrder() {
         return statusOrder;
@@ -45,13 +55,6 @@ public class Order {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public ZonedDateTime getDeliveryTime() {
         return deliveryTime;

@@ -5,6 +5,7 @@ import com.nhomA.mockproject.util.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,11 +26,17 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        //Authenticate
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.getUsername());
-        //Generate JWT TOKEN
-        final String token = JwtUtils.generateToken(userDetails.getUsername());
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        try {
+            //Authenticate
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.getUsername());
+            //Generate JWT TOKEN
+            final String token = JwtUtils.generateToken(userDetails.getUsername());
+            return new ResponseEntity<>(token, HttpStatus.OK);
+        }catch(BadCredentialsException ex){
+            return new ResponseEntity<>("account or password is incorrect", HttpStatus.valueOf(401));
+        }catch (Exception ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

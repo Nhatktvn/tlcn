@@ -7,6 +7,6 @@ import java.util.List;
 public interface AddressService {
     List<AddressDTO> getAllAddress (String username);
     AddressDTO createAddress (String username, AddressDTO addressDTO);
-    AddressDTO updateAddressById (Long id, AddressDTO addressDTO);
-    boolean deleteAddressById (Long id);
+    AddressDTO updateAddressById (String username, Long id, AddressDTO addressDTO);
+    boolean deleteAddressById (String username,Long id);
 }

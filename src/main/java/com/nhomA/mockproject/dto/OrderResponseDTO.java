@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public class OrderResponseDTO {
-    private String address;
+    private AddressDTO address;
     private String name;
     private String phone;
     private ZonedDateTime deliveryTime;
@@ -20,11 +20,11 @@ public class OrderResponseDTO {
         this.statusOrder = statusOrder;
     }
 
-    public String getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
 

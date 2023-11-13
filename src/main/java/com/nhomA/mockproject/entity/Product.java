@@ -45,6 +45,17 @@ public class Product {
     @Column(name = "description")
     private String description;
 
+    @OneToMany(mappedBy = "product")
+    private List<Favourite> favourites;
+
+    public List<Favourite> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(List<Favourite> favourites) {
+        this.favourites = favourites;
+    }
+
     public String getDescription() {
         return description;
     }

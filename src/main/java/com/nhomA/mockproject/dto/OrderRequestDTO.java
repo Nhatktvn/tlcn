@@ -3,16 +3,16 @@ package com.nhomA.mockproject.dto;
 import java.time.LocalDate;
 
 public class OrderRequestDTO {
-    private String address;
+    private Long addressId;
     private String name;
     private String phone;
 
-    public String getAddress() {
-        return address;
+    public Long getAddressId() {
+        return addressId;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
 
     public String getName() {

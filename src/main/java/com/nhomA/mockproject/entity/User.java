@@ -48,6 +48,17 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> addresses;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Favourite> favourites;
+
+    public List<Favourite> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(List<Favourite> favourites) {
+        this.favourites = favourites;
+    }
+
     public List<Category> getCreatedCategory() {
         return createdCategory;
     }

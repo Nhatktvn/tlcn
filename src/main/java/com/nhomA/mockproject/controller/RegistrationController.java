@@ -4,6 +4,7 @@ import com.nhomA.mockproject.dto.RegistrationDTO;
 import com.nhomA.mockproject.exception.RoleNotFoundException;
 import com.nhomA.mockproject.exception.UserNameExistedException;
 import com.nhomA.mockproject.service.RegistrationService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,8 @@ public class RegistrationController {
             registrationService.registration(registrationDTO);
             return new ResponseEntity<Void>(HttpStatus.CREATED);
         } catch (UserNameExistedException | RoleNotFoundException ex ) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }catch(DataIntegrityViolationException ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

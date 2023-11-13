@@ -3,9 +3,12 @@ package com.nhomA.mockproject.controller;
 import com.nhomA.mockproject.dto.IdentificationDTO;
 import com.nhomA.mockproject.service.IdentificationService;
 import com.nhomA.mockproject.service.UploadFileService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +33,17 @@ public class IdentificationController {
         String username = authentication.getName();
         try{
             return new ResponseEntity<> (identificationService.getIdentification(username), HttpStatus.OK);
-        }catch (Exception ex){
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -45,7 +58,17 @@ public class IdentificationController {
         IdentificationDTO identificationDTO = new IdentificationDTO(fullName,birthDate,phone,email,imageURL);
         try{
             return new ResponseEntity<> (identificationService.updateIdentification(username,identificationDTO), HttpStatus.OK);
-        }catch (Exception ex){
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

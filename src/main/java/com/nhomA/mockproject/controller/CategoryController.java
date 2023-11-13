@@ -1,11 +1,15 @@
 package com.nhomA.mockproject.controller;
 
 import com.nhomA.mockproject.dto.CategoryDTO;
+import com.nhomA.mockproject.exception.CategoryNotFoundException;
 import com.nhomA.mockproject.service.CategoryService;
 import com.nhomA.mockproject.service.UploadFileService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,15 +26,19 @@ public class CategoryController {
         this.categoryService = categoryService;
         this.uploadFileService = uploadFileService;
     }
-    @GetMapping("/{id}")
+    @GetMapping("/category/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable Long id){
         try {
             return new ResponseEntity<>(categoryService.getCategoryById(id),HttpStatus.OK);
-        }catch (Exception ex){
+        }
+        catch (CategoryNotFoundException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping
+    @GetMapping("/category")
     public ResponseEntity<?> getAllCategory(@RequestParam(value = "pageNo",defaultValue = "0")int pageNo,
                                             @RequestParam(value = "pageSize",defaultValue = "10")int pageSize,
                                             @RequestParam(value = "sortBy",defaultValue = "id")String sortBy,
@@ -61,7 +69,17 @@ public class CategoryController {
         CategoryDTO categoryDTO = new CategoryDTO(name,description,imageURL);
         try {
             return new ResponseEntity<>(categoryService.updateCategoryById(username,id,categoryDTO),HttpStatus.OK);
-        }catch (Exception ex){
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -69,7 +87,17 @@ public class CategoryController {
     public ResponseEntity<?> deleteCategory(@PathVariable Long id){
         try {
             return new ResponseEntity<>(categoryService.deleteCategoryById(id),HttpStatus.OK);
-        }catch (Exception ex){
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,9 +1,14 @@
 package com.nhomA.mockproject.controller;
 
+import com.nhomA.mockproject.exception.PasswordIncorrectException;
+import com.nhomA.mockproject.exception.UserNotFoundException;
 import com.nhomA.mockproject.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +29,11 @@ public class UserController
         String username = authentication.getName();
         try{
             return new ResponseEntity<> (userService.updatePassword(username,password,newPassword), HttpStatus.OK);
-        }catch (Exception ex){
+        }
+        catch (PasswordIncorrectException ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -42,7 +51,20 @@ public class UserController
     public ResponseEntity<?> resetPassword(@RequestParam("id") Long id, @RequestParam("password") String password ){
         try{
             return new ResponseEntity<> (userService.resetPassword(id,password), HttpStatus.OK);
-        }catch (Exception ex){
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        catch (UserNotFoundException ex) {
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -50,7 +72,20 @@ public class UserController
     public ResponseEntity<?> getAllUser(){
         try{
             return new ResponseEntity<> (userService.getAllUser(), HttpStatus.OK);
-        }catch (Exception ex){
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        catch (UserNotFoundException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

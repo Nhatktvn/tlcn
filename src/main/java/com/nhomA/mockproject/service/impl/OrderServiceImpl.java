@@ -3,14 +3,12 @@ package com.nhomA.mockproject.service.impl;
 import com.nhomA.mockproject.dto.OrderRequestDTO;
 import com.nhomA.mockproject.dto.OrderResponseDTO;
 import com.nhomA.mockproject.entity.*;
+import com.nhomA.mockproject.exception.AddressNotFoundException;
 import com.nhomA.mockproject.exception.CartLineItemNotFoundException;
 import com.nhomA.mockproject.exception.OrderNotFoundException;
 import com.nhomA.mockproject.exception.StatusOrderNotFoundException;
 import com.nhomA.mockproject.mapper.OrderMapper;
-import com.nhomA.mockproject.repository.CartLineItemRepository;
-import com.nhomA.mockproject.repository.OrderRepository;
-import com.nhomA.mockproject.repository.StatusOrderRepository;
-import com.nhomA.mockproject.repository.UserRepository;
+import com.nhomA.mockproject.repository.*;
 import com.nhomA.mockproject.service.OrderService;
 import com.nhomA.mockproject.util.PaginationAndSortingUtils;
 import org.springframework.data.domain.Page;
@@ -24,12 +22,14 @@ import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+    private final AddressRepository addressRepository;
     private final UserRepository userRepository;
     private final CartLineItemRepository cartLineItemRepository;
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final StatusOrderRepository statusOrderRepository;
-    public OrderServiceImpl(UserRepository userRepository, CartLineItemRepository cartLineItemRepository, OrderRepository orderRepository, OrderMapper orderMapper, StatusOrderRepository statusOrderRepository) {
+    public OrderServiceImpl(AddressRepository addressRepository, UserRepository userRepository, CartLineItemRepository cartLineItemRepository, OrderRepository orderRepository, OrderMapper orderMapper, StatusOrderRepository statusOrderRepository) {
+        this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.cartLineItemRepository = cartLineItemRepository;
         this.orderRepository = orderRepository;
@@ -59,8 +59,13 @@ public class OrderServiceImpl implements OrderService {
         if(cartLineItems.isEmpty()){
             throw new CartLineItemNotFoundException("Cart line item not found!");
         }
+        Optional<Address> existedAddress = addressRepository.findByIdAndUserId(orderRequestDTO.getAddressId(),user.getId());
+        if(existedAddress.isEmpty()){
+            throw new AddressNotFoundException("Address not found!");
+        }
+        Address address = existedAddress.get();
         Order order = new Order();
-        order.setAddress(orderRequestDTO.getAddress());
+        order.setAddress(address);
         order.setName(orderRequestDTO.getName());
         order.setPhoneNumber(orderRequestDTO.getPhone());
         order.setDeliveryTime(ZonedDateTime.now());
@@ -77,6 +82,8 @@ public class OrderServiceImpl implements OrderService {
         order.setCartLineItems(cartLineItems);
         Optional<StatusOrder> statusOrder = statusOrderRepository.findById(1L);
         order.setStatusOrder(statusOrder.get());
+//        address.getOrders().add(order);
+//        addressRepository.save(address);
         orderRepository.save(order);
         return orderMapper.toResponseDTO(order);
     }
