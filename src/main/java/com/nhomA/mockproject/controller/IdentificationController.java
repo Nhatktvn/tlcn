@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/identification")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class IdentificationController {
     private final IdentificationService identificationService;
     private final UploadFileService uploadFileService;

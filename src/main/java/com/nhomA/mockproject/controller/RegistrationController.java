@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/registration")
-@CrossOrigin
 public class RegistrationController {
 
     private final RegistrationService registrationService;

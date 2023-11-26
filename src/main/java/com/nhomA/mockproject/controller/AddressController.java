@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user/address")
-@CrossOrigin
 public class AddressController {
     private final AddressService addressService;
 

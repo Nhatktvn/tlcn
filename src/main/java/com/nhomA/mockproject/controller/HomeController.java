@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/home")
-@CrossOrigin
 public class HomeController {
 
     @GetMapping

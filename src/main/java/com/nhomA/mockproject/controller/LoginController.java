@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/login")
 @RestController
-@CrossOrigin
 public class LoginController {
 
     private final AuthenticationManager authenticationManager;

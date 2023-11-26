@@ -64,8 +64,19 @@ public class JwtUtils {
                 .getBody();
     }
 
-    private static Boolean isTokenExpired(String token) {
+    public static Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
+    }
+
+    public static String refreshToken(String token) {
+        // Lấy thông tin từ token hiện tại và tạo một token mới
+        Claims claims = Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*30))
+                .signWith(getSignKey(), SignatureAlgorithm.HS512)
+                .compact();
     }
 
 }

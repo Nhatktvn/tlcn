@@ -17,7 +17,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping
-@CrossOrigin
 public class CategoryController {
     private final CategoryService categoryService;
     private final UploadFileService uploadFileService;
