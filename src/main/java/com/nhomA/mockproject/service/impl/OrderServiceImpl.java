@@ -112,4 +112,21 @@ public class OrderServiceImpl implements OrderService {
         Order saveOrder = orderRepository.save(order);
         return orderMapper.toResponseDTO(saveOrder);
     }
+
+    @Override
+    public boolean cancelOrder(Long idOrder) {
+        Optional<Order> existedOrder = orderRepository.findById(idOrder);
+        if(existedOrder.isEmpty()){
+            throw new OrderNotFoundException("Order not found!");
+        }
+        Order order = existedOrder.get();
+        Long idStatusCurrent = order.getStatusOrder().getId();
+        if(idStatusCurrent == 1){
+            Optional<StatusOrder> emptyStatusOrder = statusOrderRepository.findById(6L);
+            order.setStatusOrder(emptyStatusOrder.get());
+            Order saveOrder = orderRepository.save(order);
+            return true;
+        }
+        return false;
+    }
 }
