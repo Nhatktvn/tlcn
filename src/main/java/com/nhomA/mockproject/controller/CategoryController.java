@@ -37,13 +37,10 @@ public class CategoryController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/category")
-    public ResponseEntity<?> getAllCategory(@RequestParam(value = "pageNo",defaultValue = "0")int pageNo,
-                                            @RequestParam(value = "pageSize",defaultValue = "10")int pageSize,
-                                            @RequestParam(value = "sortBy",defaultValue = "id")String sortBy,
-                                            @RequestParam(value = "sortDir",defaultValue = "asc")String sorDir){
+    @GetMapping("/categories")
+    public ResponseEntity<?> getAllCategory(){
         try {
-            return new ResponseEntity<>(categoryService.getAllCategory(pageNo,pageSize,sortBy,sorDir),HttpStatus.OK);
+            return new ResponseEntity<>(categoryService.getCategories(),HttpStatus.OK);
         }catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

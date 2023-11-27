@@ -1,6 +1,7 @@
 package com.nhomA.mockproject.service.impl;
 
 import com.nhomA.mockproject.dto.CategoryDTO;
+import com.nhomA.mockproject.dto.UserDTO;
 import com.nhomA.mockproject.entity.Category;
 import com.nhomA.mockproject.entity.User;
 import com.nhomA.mockproject.exception.CategoryNotFoundException;
@@ -41,12 +42,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
+    public List<CategoryDTO> getCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryDTO> categoryDTOS = categoryMapper.toDTOs(categories);
+        return categoryDTOS;
+    }
+
+    @Transactional
+    @Override
     public List<CategoryDTO> getAllCategory(int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageable= PaginationAndSortingUtils.getPageable(pageNo,pageSize,sortBy,sortDir);
         Page<Category> categories= categoryRepository.findAll(pageable);
         List<Category> categoriesContent = categories.getContent();
         return categoryMapper.toDTOs(categoriesContent);
     }
+
     @Transactional
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO, String username) {

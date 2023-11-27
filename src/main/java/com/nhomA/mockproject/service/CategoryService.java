@@ -10,4 +10,5 @@ public interface CategoryService {
    CategoryDTO createCategory (CategoryDTO categoryDTO, String username);
    CategoryDTO updateCategoryById (String username, Long id, CategoryDTO categoryDTO);
    Boolean deleteCategoryById(Long id);
+    List<CategoryDTO> getCategories();
 }
