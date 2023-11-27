@@ -1,6 +1,7 @@
 package com.nhomA.mockproject.mapper.impl;
 
 import com.nhomA.mockproject.dto.UserDTO;
+import com.nhomA.mockproject.entity.Identification;
 import com.nhomA.mockproject.entity.User;
 import com.nhomA.mockproject.mapper.UserMapper;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class UserMapperImpl  implements UserMapper {
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setCreatedDate(user.getCreatedDate());
+        userDTO.setEmail(user.getIdentification().getEmail());
+        userDTO.setPhone(user.getIdentification().getPhone());
+        userDTO.setFullName(user.getIdentification().getFullName());
         return userDTO;
     }
 
