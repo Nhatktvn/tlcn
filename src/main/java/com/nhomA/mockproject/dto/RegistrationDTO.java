@@ -1,5 +1,7 @@
 package com.nhomA.mockproject.dto;
 
+import jakarta.validation.constraints.Email;
+
 import java.time.LocalDate;
 
 public class RegistrationDTO {
@@ -7,6 +9,7 @@ public class RegistrationDTO {
     private String password;
     private String fullName;
     private String phone;
+    @Email(message = "Invalid email format")
     private String email;
 
     public RegistrationDTO(String username, String password, String fullName, String phone, String email) {

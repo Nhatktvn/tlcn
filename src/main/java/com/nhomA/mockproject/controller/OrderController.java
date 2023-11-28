@@ -82,9 +82,10 @@ public class OrderController {
     }
 
     @PutMapping("/user/cancel-order")
-    public ResponseEntity<?> cancelOrder(@RequestParam("id") Long id){
+    public ResponseEntity<?> cancelOrder(Authentication authentication,@RequestParam("id") Long id){
         try {
-            return new ResponseEntity<>(orderService.cancelOrder(id),HttpStatus.OK);
+            String username = authentication.getName();
+            return new ResponseEntity<>(orderService.cancelOrder(id, username),HttpStatus.OK);
         }
         catch (AuthenticationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);

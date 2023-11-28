@@ -37,6 +37,18 @@ public class CategoryController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/categories-sort")
+    public ResponseEntity<?> getCategoryPagingAndSorting(@RequestParam(value = "pageNo",defaultValue = "0")int pageNo,
+                                            @RequestParam(value = "pageSize",defaultValue = "10")int pageSize,
+                                            @RequestParam(value = "sortBy",defaultValue = "id")String sortBy,
+                                            @RequestParam(value = "sortDir",defaultValue = "asc")String sorDir){
+        try {
+            return new ResponseEntity<>(categoryService.getCategoryPagingAndSort(pageNo,pageSize,sortBy,sorDir),HttpStatus.OK);
+        }catch (Exception ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/categories")
     public ResponseEntity<?> getAllCategory(){
         try {
@@ -45,7 +57,7 @@ public class CategoryController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/admin/create-category")
+    @PostMapping("/admin/category")
     public  ResponseEntity<?> createCategory(Authentication authentication, @RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
                                              @RequestParam("description") String description) throws IOException {
         String username = authentication.getName();
@@ -53,11 +65,20 @@ public class CategoryController {
         CategoryDTO categoryDTO = new CategoryDTO(name,description,imageURL);
         try {
             return new ResponseEntity<>(categoryService.createCategory(categoryDTO,username),HttpStatus.OK);
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PutMapping("/admin/update-category/{id}")
+    @PutMapping("/admin/category/{id}")
     public ResponseEntity<?> updateCategory (Authentication authentication,@PathVariable Long id,@RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
                                              @RequestParam("description") String description) throws IOException{
         String username = authentication.getName();
@@ -79,7 +100,7 @@ public class CategoryController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @DeleteMapping("/admin/delete-category/{id}")
+    @DeleteMapping("/admin/category/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long id){
         try {
             return new ResponseEntity<>(categoryService.deleteCategoryById(id),HttpStatus.OK);

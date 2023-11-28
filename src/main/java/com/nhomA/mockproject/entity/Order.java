@@ -31,6 +31,18 @@ public class Order {
     @JoinColumn(name = "status_order", referencedColumnName = "id")
     private StatusOrder statusOrder;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Address getAddress() {
         return address;
     }

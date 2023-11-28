@@ -1,5 +1,6 @@
 package com.nhomA.mockproject.controller;
 
+import com.nhomA.mockproject.dto.RegistrationDTO;
 import com.nhomA.mockproject.exception.PasswordIncorrectException;
 import com.nhomA.mockproject.exception.UserNotFoundException;
 import com.nhomA.mockproject.service.UserService;
@@ -37,7 +38,7 @@ public class UserController
         }
     }
 
-    @DeleteMapping("/admin/delete-user/{id}")
+    @DeleteMapping("/admin/user/{id}")
     public ResponseEntity<?> deleteUser (@PathVariable("id") Long id){
         try{
             return new ResponseEntity<> (userService.deleteUser(id), HttpStatus.OK);
@@ -45,6 +46,16 @@ public class UserController
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/admin/user/{id}")
+    public ResponseEntity<?> updateUser (@PathVariable("id") Long id, @RequestBody RegistrationDTO registrationDTO){
+        try{
+            return new ResponseEntity<> (userService.upadateUser(id,registrationDTO), HttpStatus.OK);
+        }catch (Exception ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PutMapping("/admin/reset-password")
     public ResponseEntity<?> resetPassword(@RequestParam("id") Long id, @RequestParam("password") String password ){
@@ -88,4 +99,5 @@ public class UserController
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

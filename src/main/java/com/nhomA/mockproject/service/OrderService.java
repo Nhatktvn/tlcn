@@ -10,5 +10,5 @@ public interface OrderService {
     List<OrderResponseDTO> getAllOrder (int pageNo, int pageSize, String sortBy, String sortDir);
     OrderResponseDTO setStatusOrder(Long orderId, Long statusOrderId);
 
-    boolean cancelOrder(Long idOrder);
+    boolean cancelOrder(Long idOrder, String username);
 }

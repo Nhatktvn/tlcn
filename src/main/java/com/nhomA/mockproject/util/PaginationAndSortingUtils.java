@@ -10,4 +10,5 @@ public class PaginationAndSortingUtils {
                 ? Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         return PageRequest.of(pageNo,pageSize,sort);
     }
+
 }

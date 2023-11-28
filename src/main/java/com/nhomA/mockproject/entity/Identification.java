@@ -1,6 +1,7 @@
 package com.nhomA.mockproject.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +19,8 @@ public class Identification {
     private String fullName;
     @Column(name = "birth_date",length = 100)
     private LocalDate birthDate;
+
+    @Email(message = "Invalid email format")
     @Column(name = "email", length = 100, unique = true)
     private String email;
     @Column(name = "phone")

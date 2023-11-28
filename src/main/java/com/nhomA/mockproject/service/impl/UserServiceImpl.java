@@ -1,9 +1,10 @@
 package com.nhomA.mockproject.service.impl;
 
+import com.nhomA.mockproject.dto.RegistrationDTO;
 import com.nhomA.mockproject.dto.UserDTO;
+import com.nhomA.mockproject.entity.Identification;
 import com.nhomA.mockproject.entity.User;
 import com.nhomA.mockproject.exception.PasswordIncorrectException;
-import com.nhomA.mockproject.exception.UserExistedException;
 import com.nhomA.mockproject.exception.UserNotFoundException;
 import com.nhomA.mockproject.mapper.UserMapper;
 import com.nhomA.mockproject.repository.UserRepository;
@@ -66,5 +67,23 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         return true;
+    }
+
+    @Override
+    public UserDTO upadateUser(Long id, RegistrationDTO registrationDTO) {
+        Optional<User> existedUser = userRepository.findById(id);
+        if(existedUser.isEmpty()){
+            throw  new UserNotFoundException("User not found!");
+        }
+        User user = existedUser.get();
+        user.setPassword(registrationDTO.getPassword());
+        user.setUsername(registrationDTO.getUsername());
+        Identification identification = user.getIdentification();
+        identification.setFullName(registrationDTO.getFullName());
+        identification.setEmail(registrationDTO.getEmail());
+        identification.setPhone(registrationDTO.getPhone());
+        user.setIdentification(identification);
+        User saveUser = userRepository.save(user);
+        return userMapper.toDTO(saveUser);
     }
 }

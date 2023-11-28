@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public List<CategoryDTO> getAllCategory(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public List<CategoryDTO> getCategoryPagingAndSort(int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageable= PaginationAndSortingUtils.getPageable(pageNo,pageSize,sortBy,sortDir);
         Page<Category> categories= categoryRepository.findAll(pageable);
         List<Category> categoriesContent = categories.getContent();

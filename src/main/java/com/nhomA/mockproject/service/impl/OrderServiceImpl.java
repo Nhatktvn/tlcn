@@ -82,6 +82,8 @@ public class OrderServiceImpl implements OrderService {
         order.setCartLineItems(cartLineItems);
         Optional<StatusOrder> statusOrder = statusOrderRepository.findById(1L);
         order.setStatusOrder(statusOrder.get());
+        order.setUser(user);
+        user.getOrders().add(order);
 //        address.getOrders().add(order);
 //        addressRepository.save(address);
         orderRepository.save(order);
@@ -114,7 +116,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean cancelOrder(Long idOrder) {
+    public boolean cancelOrder(Long idOrder, String username) {
         Optional<Order> existedOrder = orderRepository.findById(idOrder);
         if(existedOrder.isEmpty()){
             throw new OrderNotFoundException("Order not found!");
