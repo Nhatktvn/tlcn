@@ -79,14 +79,11 @@ public class CategoryController {
         }
     }
     @PutMapping("/admin/category/{id}")
-    public ResponseEntity<?> updateCategory (Authentication authentication,@PathVariable Long id,@RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
+    public ResponseEntity<?> updateCategory (Authentication authentication,@PathVariable Long id,@RequestParam(name = "image", required = false)MultipartFile multipartFile, @RequestParam("name") String name,
                                              @RequestParam("description") String description) throws IOException{
         String username = authentication.getName();
         String imageUrl = "";
-        if(multipartFile.isEmpty()){
-            imageUrl = "";
-        }
-        else{
+        if(multipartFile != null){
             imageUrl = uploadFileService.uploadFile(multipartFile);
         }
         CategoryDTO categoryDTO = new CategoryDTO(name,description,imageUrl);
