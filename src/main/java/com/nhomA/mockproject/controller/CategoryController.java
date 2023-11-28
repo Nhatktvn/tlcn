@@ -82,8 +82,14 @@ public class CategoryController {
     public ResponseEntity<?> updateCategory (Authentication authentication,@PathVariable Long id,@RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
                                              @RequestParam("description") String description) throws IOException{
         String username = authentication.getName();
-        String imageURL = uploadFileService.uploadFile(multipartFile);
-        CategoryDTO categoryDTO = new CategoryDTO(name,description,imageURL);
+        String imageUrl = "";
+        if(multipartFile.isEmpty()){
+            imageUrl = "";
+        }
+        else{
+            imageUrl = uploadFileService.uploadFile(multipartFile);
+        }
+        CategoryDTO categoryDTO = new CategoryDTO(name,description,imageUrl);
         try {
             return new ResponseEntity<>(categoryService.updateCategoryById(username,id,categoryDTO),HttpStatus.OK);
         }

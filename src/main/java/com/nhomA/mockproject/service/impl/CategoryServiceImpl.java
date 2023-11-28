@@ -82,7 +82,9 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = existedCategory.get();
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
-        category.setUrlImage(categoryDTO.getUrlImage());
+        if(categoryDTO.getUrlImage() != ""){
+            category.setUrlImage(categoryDTO.getUrlImage());
+        }
         category.setUserUpdated(userUpdated);
         category.setUpdatedDate(ZonedDateTime.now());
         categoryRepository.save(category);
