@@ -126,15 +126,4 @@ public class UserController
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @PostMapping("/send-mail")
-    public ResponseEntity<?> sendSimpleEmail() {
-        try{
-            return new ResponseEntity<> (userService.sendEmail("nguyenthiminhnguyetkt9x1@gmail.com", "hello", "description"), HttpStatus.OK);
-        }
-        catch (Exception ex){
-            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 }

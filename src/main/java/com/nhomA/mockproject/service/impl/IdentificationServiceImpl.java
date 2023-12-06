@@ -38,7 +38,9 @@ public class IdentificationServiceImpl implements IdentificationService {
         identification.setBirthDate(identificationDTO.getBirthDate());
         identification.setPhone(identificationDTO.getPhone());
         identification.setEmail(identificationDTO.getEmail());
-        identification.setUrlAvatar(identificationDTO.getUrlAvatar());
+        if(identificationDTO.getUrlAvatar() != ""){
+            identification.setUrlAvatar(identificationDTO.getUrlAvatar());
+        }
         user.setIdentification(identification);
         userRepository.save(user);
         return identificationDTO;

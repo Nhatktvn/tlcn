@@ -49,13 +49,16 @@ public class IdentificationController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateIdentification(Authentication authentication, @RequestParam("image") MultipartFile multipartFile,
+    public ResponseEntity<?> updateIdentification(Authentication authentication, @RequestParam(value = "image", required = false) MultipartFile multipartFile,
                                                   @RequestParam("fullName") String fullName, @RequestParam("birthDate") LocalDate birthDate,
                                                   @RequestParam("phone") String phone, @RequestParam("email") String email
                                                   ) throws IOException {
-        String imageURL = uploadFileService.uploadFile(multipartFile);
+        String imageUrl = "";
+        if(multipartFile != null){
+            imageUrl = uploadFileService.uploadFile(multipartFile);
+        }
         String username = authentication.getName();
-        IdentificationDTO identificationDTO = new IdentificationDTO(fullName,birthDate,phone,email,imageURL);
+        IdentificationDTO identificationDTO = new IdentificationDTO(fullName,birthDate,phone,email,imageUrl);
         try{
             return new ResponseEntity<> (identificationService.updateIdentification(username,identificationDTO), HttpStatus.OK);
         }

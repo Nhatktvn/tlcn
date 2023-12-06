@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
         String resetLink = "http://your-app-url/reset-password?token=" + resetToken + "&username=" + user.getUsername();
         sendEmail(email, "Password Reset", "Click the link to reset your password: " + resetLink);
-        return resetLink;
+        return "send mail success";
     }
 
     @Override
@@ -123,17 +123,16 @@ public class UserServiceImpl implements UserService {
         }
         User user = existedUser.get();
         user.setPassword(passwordEncoder.encode(password));
+        user.setTokenResetPassword(null);
         userRepository.save(user);
         return true;
     }
 
-    @Override
-    public boolean sendEmail(String to, String subject, String text) {
+    public void sendEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
         javaMailSender.send(message);
-        return true;
     }
 }
