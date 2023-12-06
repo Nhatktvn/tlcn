@@ -7,6 +7,8 @@ import com.nhomA.mockproject.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -119,6 +121,16 @@ public class UserController
         }
         catch (UserNotFoundException ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/send-mail")
+    public ResponseEntity<?> sendSimpleEmail() {
+        try{
+            return new ResponseEntity<> (userService.sendEmail("nguyenthiminhnguyetkt9x1@gmail.com", "hello", "description"), HttpStatus.OK);
         }
         catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

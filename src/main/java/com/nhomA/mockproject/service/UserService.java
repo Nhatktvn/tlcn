@@ -15,5 +15,6 @@ public interface UserService {
     String sendForgotPassword (String email);
 
     boolean updatePassword (String token,String username,String password);
+    boolean sendEmail(String to, String subject, String text);
 
 }

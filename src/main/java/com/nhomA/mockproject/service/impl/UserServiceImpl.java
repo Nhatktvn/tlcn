@@ -127,11 +127,13 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    public void sendEmail(String to, String subject, String text) {
+    @Override
+    public boolean sendEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
         javaMailSender.send(message);
+        return true;
     }
 }

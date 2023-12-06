@@ -67,9 +67,6 @@ public class ProductServiceImpl implements ProductService {
         product.setUserUpdated(user);
         product.setCreatedDate(ZonedDateTime.now());
         product.setUpdatedDate(ZonedDateTime.now());
-        if(productRequestDTO.getUrlImage() != ""){
-            product.setUrlImage(productRequestDTO.getUrlImage());
-        }
         Product saveProduct = productRepository.save(product);
         return productMapper.toResponseDTO(saveProduct);
     }
@@ -90,7 +87,9 @@ public class ProductServiceImpl implements ProductService {
         product.setAvailable(productRequestDTO.getAvailable());
         product.setDiscount(productRequestDTO.getDiscount());
         product.setPrice(productRequestDTO.getPrice());
-        product.setUrlImage(productRequestDTO.getUrlImage());
+        if(productRequestDTO.getUrlImage() != ""){
+            product.setUrlImage(productRequestDTO.getUrlImage());
+        }
         Category category = existedCategory.get();
         product.setCategory(category);
         product.setUserUpdated(userUpdated);
