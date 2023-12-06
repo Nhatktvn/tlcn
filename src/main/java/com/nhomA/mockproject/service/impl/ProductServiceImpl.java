@@ -67,6 +67,9 @@ public class ProductServiceImpl implements ProductService {
         product.setUserUpdated(user);
         product.setCreatedDate(ZonedDateTime.now());
         product.setUpdatedDate(ZonedDateTime.now());
+        if(productRequestDTO.getUrlImage() != ""){
+            product.setUrlImage(productRequestDTO.getUrlImage());
+        }
         Product saveProduct = productRepository.save(product);
         return productMapper.toResponseDTO(saveProduct);
     }

@@ -5,7 +5,6 @@ import com.nhomA.mockproject.exception.PasswordIncorrectException;
 import com.nhomA.mockproject.exception.UserNotFoundException;
 import com.nhomA.mockproject.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,12 +22,12 @@ public class UserController
         this.userService = userService;
     }
 
-    @PutMapping("/password")
-    public ResponseEntity<?> updatePassword (Authentication authentication, @RequestParam("password") String password
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword (Authentication authentication, @RequestParam("password") String password
                                              ,@RequestParam("newPassword") String newPassword){
         String username = authentication.getName();
         try{
-            return new ResponseEntity<> (userService.updatePassword(username,password,newPassword), HttpStatus.OK);
+            return new ResponseEntity<> (userService.changePassword(username,password,newPassword), HttpStatus.OK);
         }
         catch (PasswordIncorrectException ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -50,7 +49,7 @@ public class UserController
     @PutMapping("/admin/user/{id}")
     public ResponseEntity<?> updateUser (@PathVariable("id") Long id, @RequestBody RegistrationDTO registrationDTO){
         try{
-            return new ResponseEntity<> (userService.upadateUser(id,registrationDTO), HttpStatus.OK);
+            return new ResponseEntity<> (userService.updateUser(id,registrationDTO), HttpStatus.OK);
         }catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -94,6 +93,32 @@ public class UserController
         }
         catch (UserNotFoundException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email){
+        try{
+            return new ResponseEntity<> (userService.sendForgotPassword(email), HttpStatus.OK);
+        }
+        catch (UserNotFoundException ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestParam("tokenForgot") String token, @RequestParam("username") String username,@RequestParam("password") String password ){
+        try{
+            return new ResponseEntity<> (userService.updatePassword(token,username,password), HttpStatus.OK);
+        }
+        catch (UserNotFoundException ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.NOT_FOUND);
         }
         catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

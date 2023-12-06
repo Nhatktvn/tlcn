@@ -68,8 +68,11 @@ public class ProductController {
                                             @RequestParam("category_id") Long categoryId, @RequestParam("available") int available,
                                             @RequestParam("discount") double discount, @RequestParam("price") double price, @RequestParam("description") String description) throws IOException {
         String username = authentication.getName();
-        String imageURL = uploadFileService.uploadFile(multipartFile);
-        ProductRequestDTO productRequestDTO = new ProductRequestDTO(name,categoryId,available,discount,price,imageURL,description);
+        String imageUrl = "";
+        if(multipartFile != null){
+            imageUrl = uploadFileService.uploadFile(multipartFile);
+        }
+        ProductRequestDTO productRequestDTO = new ProductRequestDTO(name,categoryId,available,discount,price,imageUrl,description);
         try {
             return new ResponseEntity<>(productService.createProduct(username, productRequestDTO),HttpStatus.OK);
         }
@@ -90,7 +93,7 @@ public class ProductController {
         }
     }
     @PutMapping("/admin/products/{id}")
-    public ResponseEntity<?> updateProduct (Authentication authentication,@PathVariable Long id, @RequestParam("image")MultipartFile multipartFile, @RequestParam("name") String name,
+    public ResponseEntity<?> updateProduct (Authentication authentication,@PathVariable Long id, @RequestParam(value = "image", required = false)MultipartFile multipartFile, @RequestParam("name") String name,
                                             @RequestParam("category_id") Long categoryId, @RequestParam("available") int available,
                                             @RequestParam("discount") double discount, @RequestParam("price") double price, @RequestParam("description") String description) throws IOException {
         String username = authentication.getName();

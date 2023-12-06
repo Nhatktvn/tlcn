@@ -24,7 +24,8 @@ public class User {
     @ColumnDefault("false")
     private Boolean status;
 
-
+    @Column(name = "token_reset_password")
+    private String tokenResetPassword;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "identification_id", referencedColumnName = "id")
     private Identification identification;
@@ -53,6 +54,14 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
+
+    public String getTokenResetPassword() {
+        return tokenResetPassword;
+    }
+
+    public void setTokenResetPassword(String tokenResetPassword) {
+        this.tokenResetPassword = tokenResetPassword;
+    }
 
     public List<Order> getOrders() {
         return orders;

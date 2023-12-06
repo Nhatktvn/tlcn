@@ -6,9 +6,14 @@ import com.nhomA.mockproject.dto.UserDTO;
 import java.util.List;
 
 public interface UserService {
-    boolean updatePassword (String username,String checkPassword, String newPassword);
+    boolean changePassword (String username,String checkPassword, String newPassword);
     List<UserDTO> getAllUser ();
     boolean deleteUser (Long id);
     boolean resetPassword(Long id, String newPassword);
-    UserDTO upadateUser(Long id, RegistrationDTO registrationDTO);
+    UserDTO updateUser(Long id, RegistrationDTO registrationDTO);
+
+    String sendForgotPassword (String email);
+
+    boolean updatePassword (String token,String username,String password);
+
 }
