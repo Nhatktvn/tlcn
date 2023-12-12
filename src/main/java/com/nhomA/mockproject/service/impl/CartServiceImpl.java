@@ -8,6 +8,7 @@ import com.nhomA.mockproject.entity.Product;
 import com.nhomA.mockproject.entity.User;
 import com.nhomA.mockproject.exception.CartLineItemNotFoundException;
 import com.nhomA.mockproject.exception.CartNotFoundException;
+import com.nhomA.mockproject.exception.ProductNotFoundException;
 import com.nhomA.mockproject.exception.VariantProductNotFoundException;
 import com.nhomA.mockproject.mapper.CartLineItemMapper;
 import com.nhomA.mockproject.repository.CartLineItemRepository;
@@ -88,12 +89,18 @@ public class CartServiceImpl implements CartService {
         Optional<User> emptyUser =  userRepository.findByUsername(username);
         User user = emptyUser.get();
         Cart cart = user.getCart();
+        Optional<Product> existedProduct = productRepository.findById(idProduct);
+        if(existedProduct.isEmpty()){
+            throw new ProductNotFoundException("Product not found!");
+        }
+        Product product = existedProduct.get();
         Optional<CartLineItem> emptyCartLineItem = cartLineItemRepository.findByCartIdAndProductIdAndIsDeleted(cart.getId(),idProduct,false);
         if(emptyCartLineItem.isEmpty()){
             throw new CartLineItemNotFoundException("Cart line item not found");
         }
         CartLineItem cartLineItem = emptyCartLineItem.get();
         cartLineItem.setQuantity(quantity);
+        cartLineItem.setTotalPrice(quantity * product.getPrice() - quantity * product.getPrice() * product.getDiscount());
         CartLineItem saveCartLineItem = cartLineItemRepository.save(cartLineItem);
         return cartLineItemMapper.toResponseDTO(saveCartLineItem);
     }

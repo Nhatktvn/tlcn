@@ -41,7 +41,7 @@ public class CartController {
         }
     }
     @DeleteMapping("/cart/delete-items/{idProduct}")
-    public ResponseEntity<?> deleteProduct (Authentication authentication, @PathVariable("IdProduct") Long idProduct){
+    public ResponseEntity<?> deleteProduct (Authentication authentication, @PathVariable("idProduct") Long idProduct){
         String username = authentication.getName();
         try{
             return new ResponseEntity<> (cartService.removeProductCart(idProduct,username), HttpStatus.CREATED);
@@ -60,7 +60,7 @@ public class CartController {
         }
     }
     @PutMapping("cart/set-quantity/{idProduct}")
-    public ResponseEntity<?> deleteItem (Authentication authentication, @PathVariable("IdProduct") Long idProduct,@RequestParam("quantity") int quantity){
+    public ResponseEntity<?> deleteItem (Authentication authentication, @PathVariable("idProduct") Long idProduct,@RequestParam("quantity") int quantity){
         String username = authentication.getName();
         try{
             return new ResponseEntity<> (cartService.updateQuantityProduct(username,idProduct,quantity), HttpStatus.OK);
