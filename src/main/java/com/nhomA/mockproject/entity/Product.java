@@ -42,7 +42,7 @@ public class Product {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @Column(name = "description")
+    @Column(name = "description",length = -1)
     private String description;
 
     @OneToMany(mappedBy = "product")

@@ -16,7 +16,7 @@ public class Category {
     private String name;
     @Column(name = "url_image",nullable = false)
     private String urlImage;
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false,length = -1)
     private String description;
     @Column(name = "created_date")
     private ZonedDateTime createdDate;

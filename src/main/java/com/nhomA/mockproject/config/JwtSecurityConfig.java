@@ -51,7 +51,7 @@ public class JwtSecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/user/**").hasRole("USER")
-                                .requestMatchers("/cart/**","/identification/**","/password/**").authenticated()
+                                .requestMatchers("/cart/**","/identification/**","/change-password/**").authenticated()
                                 .anyRequest().permitAll()
                 ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

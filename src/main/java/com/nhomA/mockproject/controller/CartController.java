@@ -1,5 +1,6 @@
 package com.nhomA.mockproject.controller;
 
+import com.nhomA.mockproject.dto.AddCartDTO;
 import com.nhomA.mockproject.entity.CartLineItem;
 import com.nhomA.mockproject.service.CartService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -21,10 +22,10 @@ public class CartController {
         this.cartService = cartService;
     }
     @PostMapping("/add-cart")
-    public ResponseEntity<?> addCart(Authentication authentication, @RequestParam("idProduct") Long idProduct, @RequestParam("quantity") int quantity){
+    public ResponseEntity<?> addCart(Authentication authentication, @RequestBody AddCartDTO addCartDTO){
         String username = authentication.getName();
         try{
-            return new ResponseEntity<> (cartService.addProductToCart(idProduct,quantity,username), HttpStatus.CREATED);
+            return new ResponseEntity<> (cartService.addProductToCart(addCartDTO.getIdProduct(), addCartDTO.getQuantity(), ,username), HttpStatus.CREATED);
         }
         catch (AuthenticationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);

@@ -87,6 +87,7 @@ public class ProductServiceImpl implements ProductService {
         product.setAvailable(productRequestDTO.getAvailable());
         product.setDiscount(productRequestDTO.getDiscount());
         product.setPrice(productRequestDTO.getPrice());
+        product.setDescription(productRequestDTO.getDescription());
         if(productRequestDTO.getUrlImage() != ""){
             product.setUrlImage(productRequestDTO.getUrlImage());
         }

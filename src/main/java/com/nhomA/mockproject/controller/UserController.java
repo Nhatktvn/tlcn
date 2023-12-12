@@ -52,6 +52,15 @@ public class UserController
     public ResponseEntity<?> updateUser (@PathVariable("id") Long id, @RequestBody RegistrationDTO registrationDTO){
         try{
             return new ResponseEntity<> (userService.updateUser(id,registrationDTO), HttpStatus.OK);
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }catch (Exception ex){
             return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
