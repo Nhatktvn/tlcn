@@ -1,6 +1,7 @@
 package com.nhomA.mockproject.service.impl;
 
 import com.nhomA.mockproject.dto.CartLineItemResponseDTO;
+import com.nhomA.mockproject.dto.CartLineItemsDTO;
 import com.nhomA.mockproject.entity.Cart;
 import com.nhomA.mockproject.entity.CartLineItem;
 import com.nhomA.mockproject.entity.Product;
@@ -95,5 +96,15 @@ public class CartServiceImpl implements CartService {
         cartLineItem.setQuantity(quantity);
         CartLineItem saveCartLineItem = cartLineItemRepository.save(cartLineItem);
         return cartLineItemMapper.toResponseDTO(saveCartLineItem);
+    }
+
+    @Override
+    public List<CartLineItemResponseDTO> getAllCartLineItemUsername(String username) {
+        Optional<User> emptyUser =  userRepository.findByUsername(username);
+        User user = emptyUser.get();
+        Cart cart = user.getCart();
+        List<CartLineItem> cartLineItems = cartLineItemRepository.findByCartIdAndIsDeleted(cart.getId(), false);
+        List<CartLineItemResponseDTO> cartLineItemResponseDTOS = cartLineItemMapper.toResponseDTOs(cartLineItems);
+        return cartLineItemResponseDTOS;
     }
 }

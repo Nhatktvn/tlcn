@@ -9,6 +9,33 @@ public class CartLineItemResponseDTO {
     private double totalPrice;
     private ZonedDateTime addedDate;
     private boolean isDeleted;
+    private String name;
+    private double price;
+    private String urlImage;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
+    }
 
     public Long getCartId() {
         return cartId;
