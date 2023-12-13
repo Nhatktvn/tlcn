@@ -90,6 +90,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponseDTO(order);
     }
 
+    @Transactional
     @Override
     public List<OrderResponseDTO> getAllOrder(int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageable= PaginationAndSortingUtils.getPageable(pageNo,pageSize,sortBy,sortDir);
@@ -115,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponseDTO(saveOrder);
     }
 
+    @Transactional
     @Override
     public boolean cancelOrder(Long idOrder, String username) {
         Optional<Order> existedOrder = orderRepository.findById(idOrder);

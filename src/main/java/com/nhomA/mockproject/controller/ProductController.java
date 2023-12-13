@@ -48,9 +48,11 @@ public class ProductController {
     public ResponseEntity<?> getAllProduct(@RequestParam(value = "pageNo",defaultValue = "0")int pageNo,
                                             @RequestParam(value = "pageSize",defaultValue = "10")int pageSize,
                                             @RequestParam(value = "sortBy",defaultValue = "id")String sortBy,
-                                            @RequestParam(value = "sortDir",defaultValue = "asc")String sorDir){
+                                            @RequestParam(value = "sortDir",defaultValue = "asc")String sorDir,
+                                            @RequestParam(value = "idCategory", defaultValue = "") Long idCategory
+    ){
         try {
-            return new ResponseEntity<>(productService.getAllProduct(pageNo,pageSize,sortBy,sorDir),HttpStatus.OK);
+            return new ResponseEntity<>(productService.getAllProduct(pageNo,pageSize,sortBy,sorDir, idCategory),HttpStatus.OK);
         }catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

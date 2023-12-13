@@ -83,6 +83,7 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
+    @Transactional
     @Override
     public CartLineItemResponseDTO updateQuantityProduct(String username, Long idProduct, int quantity) {
         Optional<User> emptyUser =  userRepository.findByUsername(username);
@@ -103,6 +104,7 @@ public class CartServiceImpl implements CartService {
         CartLineItem saveCartLineItem = cartLineItemRepository.save(cartLineItem);
         return cartLineItemMapper.toResponseDTO(saveCartLineItem);
     }
+    @Transactional
     @Override
     public List<CartLineItemResponseDTO> getAllCartLineItemUsername(String username) {
         Optional<User> emptyUser =  userRepository.findByUsername(username);

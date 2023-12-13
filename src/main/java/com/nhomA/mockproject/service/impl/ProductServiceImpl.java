@@ -45,9 +45,14 @@ public class ProductServiceImpl implements ProductService {
     }
     @Transactional
     @Override
-    public List<ProductResponseDTO> getAllProduct(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public List<ProductResponseDTO> getAllProduct(int pageNo, int pageSize, String sortBy, String sortDir, Long idCategory) {
         Pageable pageable= PaginationAndSortingUtils.getPageable(pageNo,pageSize,sortBy,sortDir);
-        Page<Product> products= productRepository.findAll(pageable);
+        if (idCategory == null){
+            Page<Product> products= productRepository.findAll(pageable);
+            List<Product> productsContent = products.getContent();
+            return productMapper.toResponseDTOs(productsContent);
+        }
+        Page<Product> products= productRepository.findByCategoryId(idCategory,pageable);
         List<Product> productsContent = products.getContent();
         return productMapper.toResponseDTOs(productsContent);
     }
@@ -116,6 +121,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toResponseDTOs(category.getProducts());
     }
 
+    @Transactional
     @Override
     public List<ProductResponseDTO> searchProduct(String searchName) {
         List<Product> emptyProducts = productRepository.findByNameContaining(searchName);
