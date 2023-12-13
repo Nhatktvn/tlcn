@@ -6,6 +6,7 @@ import com.nhomA.mockproject.entity.Product;
 import com.nhomA.mockproject.entity.Reviews;
 import com.nhomA.mockproject.entity.User;
 import com.nhomA.mockproject.exception.ProductNotFoundException;
+import com.nhomA.mockproject.exception.ReviewNotFoundException;
 import com.nhomA.mockproject.exception.UserNotFoundException;
 import com.nhomA.mockproject.mapper.ReviewMapper;
 import com.nhomA.mockproject.repository.ProductRepository;
@@ -45,7 +46,9 @@ public class ReviewsServiceImpl implements ReviewsService {
             throw new ProductNotFoundException("Product not found!");
         }
         Reviews reviews = new Reviews();
-        reviews.setUrlImage(reviewRequestDTO.getUrlImage());
+        if(reviewRequestDTO.getUrlImage() != ""){
+            reviews.setUrlImage(reviewRequestDTO.getUrlImage());
+        }
         reviews.setProduct(existedProduct.get());
         reviews.setRate(reviewRequestDTO.getRate());
         reviews.setUser(existedUser.get());
@@ -57,13 +60,32 @@ public class ReviewsServiceImpl implements ReviewsService {
     @Transactional
     @Override
     public ReviewResponseDTO updateReview(String username, Long idReview, ReviewRequestDTO reviewRequestDTO) {
-        return null;
+        Optional<User> existedUser = userRepository.findByUsername(username);
+        Optional<Reviews> existedReview = reviewsRepository.findByIdAndUserId(idReview, existedUser.get().getId());
+        if(existedReview.isEmpty()){
+            throw new ReviewNotFoundException("Review not found!");
+        }
+        Reviews review = existedReview.get();
+        review.setContentReviews(reviewRequestDTO.getContentReviews());
+        review.setRate(reviewRequestDTO.getRate());
+        if(reviewRequestDTO.getUrlImage() != ""){
+            review.setUrlImage(reviewRequestDTO.getUrlImage());
+        }
+        reviewsRepository.save(review);
+        return reviewMapper.toDTO(review);
     }
 
     @Transactional
     @Override
-    public ReviewResponseDTO deleteReview(String username, Long idReview, ReviewRequestDTO reviewRequestDTO) {
-        return null;
+    public boolean deleteReview(String username, Long idReview) {
+        Optional<User> existedUser = userRepository.findByUsername(username);
+        Optional<Reviews> existedReview = reviewsRepository.findByIdAndUserId(idReview, existedUser.get().getId());
+        if(existedReview.isEmpty()){
+            throw new ReviewNotFoundException("Review not found!");
+        }
+        Reviews review = existedReview.get();
+        reviewsRepository.delete(review);
+        return true;
     }
 
     @Transactional
