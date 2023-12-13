@@ -3,6 +3,7 @@ package com.nhomA.mockproject.dto;
 import com.nhomA.mockproject.entity.User;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 public class ProductResponseDTO {
     private Long id;
@@ -11,7 +12,7 @@ public class ProductResponseDTO {
     private int available;
     private double discount;
     private double price;
-
+    private List<ReviewResponseDTO> reviews;
     private String urlImage;
 
     private UserDTO userCreated;
@@ -19,6 +20,23 @@ public class ProductResponseDTO {
     private ZonedDateTime createdDate;
     private ZonedDateTime updatedDate;
     private String description;
+    private Double rate;
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
+    public List<ReviewResponseDTO> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewResponseDTO> reviews) {
+        this.reviews = reviews;
+    }
 
     public String getDescription() {
         return description;

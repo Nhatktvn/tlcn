@@ -4,6 +4,7 @@ import com.nhomA.mockproject.dto.ProductRequestDTO;
 import com.nhomA.mockproject.dto.ProductResponseDTO;
 import com.nhomA.mockproject.entity.Category;
 import com.nhomA.mockproject.entity.Product;
+import com.nhomA.mockproject.entity.Reviews;
 import com.nhomA.mockproject.entity.User;
 import com.nhomA.mockproject.exception.CategoryNotFoundException;
 import com.nhomA.mockproject.exception.ProductNotFoundException;

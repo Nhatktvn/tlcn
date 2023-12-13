@@ -35,6 +35,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
 
+
     @OneToMany(mappedBy = "userCreated", cascade = CascadeType.ALL)
     private List<Product> createdProducts;
 
@@ -54,6 +55,18 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Reviews> reviews;
+
+
+    public List<Reviews> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Reviews> reviews) {
+        this.reviews = reviews;
+    }
 
     public String getTokenResetPassword() {
         return tokenResetPassword;

@@ -48,6 +48,17 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Favourite> favourites;
 
+    @OneToMany(mappedBy = "product")
+    private List<Reviews> reviews;
+
+    public List<Reviews> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Reviews> reviews) {
+        this.reviews = reviews;
+    }
+
     public List<Favourite> getFavourites() {
         return favourites;
     }
