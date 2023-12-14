@@ -1,5 +1,6 @@
 package com.nhomA.mockproject.service.impl;
 
+import com.nhomA.mockproject.dto.ListProductPageDTO;
 import com.nhomA.mockproject.dto.ProductRequestDTO;
 import com.nhomA.mockproject.dto.ProductResponseDTO;
 import com.nhomA.mockproject.entity.Category;
@@ -43,18 +44,31 @@ public class ProductServiceImpl implements ProductService {
         ProductResponseDTO productResponseDTO = productMapper.toResponseDTO(product.get());
         return productResponseDTO;
     }
+
     @Transactional
     @Override
-    public List<ProductResponseDTO> getAllProduct(int pageNo, int pageSize, String sortBy, String sortDir, Long idCategory) {
+    public List<ProductResponseDTO> getAllProduct() {
+        List<Product> products = productRepository.findAll();
+        List<ProductResponseDTO> productResponseDTOS = productMapper.toResponseDTOs(products);
+        return productResponseDTOS;
+    }
+
+    @Transactional
+    @Override
+    public ListProductPageDTO getProductPage(int pageNo, int pageSize, String sortBy, String sortDir, Long idCategory) {
         Pageable pageable= PaginationAndSortingUtils.getPageable(pageNo,pageSize,sortBy,sortDir);
         if (idCategory == null){
+            List<Product> productsAll = productRepository.findAll();
+            int pageSizes = (int) Math.ceil((double) productsAll.size() /pageSize);
             Page<Product> products= productRepository.findAll(pageable);
             List<Product> productsContent = products.getContent();
-            return productMapper.toResponseDTOs(productsContent);
+            return new ListProductPageDTO(productMapper.toResponseDTOs(productsContent),pageSizes);
         }
-        Page<Product> products= productRepository.findByCategoryId(idCategory,pageable);
-        List<Product> productsContent = products.getContent();
-        return productMapper.toResponseDTOs(productsContent);
+        List<Product> productsByCategory = productRepository.findByCategoryId(idCategory);
+        int pageSizes = (int) Math.ceil((double) productsByCategory.size() /pageSize);
+        Page<Product> productPage= productRepository.findByCategoryId(idCategory,pageable);
+        List<Product> productsContent = productPage.getContent();
+        return new ListProductPageDTO(productMapper.toResponseDTOs(productsContent),pageSizes);
     }
     @Transactional
     @Override

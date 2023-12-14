@@ -6,7 +6,6 @@ import com.nhomA.mockproject.exception.ProductNotFoundException;
 import com.nhomA.mockproject.service.ProductService;
 import com.nhomA.mockproject.service.UploadFileService;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.data.convert.ReadingConverter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -44,15 +43,24 @@ public class ProductController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/products/get-all")
+    public ResponseEntity<?> getAllProduct(){
+        try {
+            return new ResponseEntity<>(productService.getAllProduct(),HttpStatus.OK);
+        }catch (Exception ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/products")
-    public ResponseEntity<?> getAllProduct(@RequestParam(value = "pageNo",defaultValue = "0")int pageNo,
+    public ResponseEntity<?> getProductPage(@RequestParam(value = "pageNo",defaultValue = "0")int pageNo,
                                             @RequestParam(value = "pageSize",defaultValue = "10")int pageSize,
                                             @RequestParam(value = "sortBy",defaultValue = "id")String sortBy,
                                             @RequestParam(value = "sortDir",defaultValue = "asc")String sorDir,
                                             @RequestParam(value = "idCategory", defaultValue = "") Long idCategory
     ){
         try {
-            return new ResponseEntity<>(productService.getAllProduct(pageNo,pageSize,sortBy,sorDir, idCategory),HttpStatus.OK);
+            return new ResponseEntity<>(productService.getProductPage(pageNo,pageSize,sortBy,sorDir, idCategory),HttpStatus.OK);
         }catch (Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
