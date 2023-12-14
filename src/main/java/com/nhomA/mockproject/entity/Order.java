@@ -1,6 +1,8 @@
 package com.nhomA.mockproject.entity;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -25,6 +27,9 @@ public class Order {
     private String phoneNumber;
     @Column(name = "total_price")
     private Double totalPrice;
+    @Column(name = "status_Payment")
+    @Value("0")
+    private boolean statusPayment;
     @OneToMany(mappedBy = "order",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.DETACH})
     private List<CartLineItem> cartLineItems;
     @ManyToOne(cascade = CascadeType.ALL)
@@ -34,6 +39,14 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    public boolean isStatusPayment() {
+        return statusPayment;
+    }
+
+    public void setStatusPayment(boolean statusPayment) {
+        this.statusPayment = statusPayment;
+    }
 
     public User getUser() {
         return user;

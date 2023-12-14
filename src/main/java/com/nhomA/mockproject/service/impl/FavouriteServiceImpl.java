@@ -43,6 +43,10 @@ public class FavouriteServiceImpl implements FavouriteService {
         if(existedProduct.isEmpty()){
             throw new ProductNotFoundException("Product not found!");
         }
+        Optional<Favourite> existedFavourite = favouriteRepository.findByUserIdAndProductId(existedUser.get().getId(),idProduct);
+        if(existedFavourite.isPresent()){
+            throw new ProductNotFoundException("Favourite is existed!");
+        }
         Favourite favourite = new Favourite();
         favourite.setUser(existedUser.get());
         favourite.setProduct(existedProduct.get());
