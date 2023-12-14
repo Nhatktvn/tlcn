@@ -1,6 +1,7 @@
 package com.nhomA.mockproject.dto;
 
 import com.nhomA.mockproject.entity.User;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -20,6 +21,7 @@ public class ProductResponseDTO {
     private ZonedDateTime createdDate;
     private ZonedDateTime updatedDate;
     private String description;
+    @Value("0")
     private Double rate;
 
     public Double getRate() {

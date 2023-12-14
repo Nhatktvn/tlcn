@@ -11,7 +11,16 @@ public class CartLineItemResponseDTO {
     private boolean isDeleted;
     private String name;
     private double price;
+    private double discount;
     private String urlImage;
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
 
     public String getName() {
         return name;

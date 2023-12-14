@@ -22,6 +22,7 @@ public class CartLineItemMapperImpl implements CartLineItemMapper {
         responseDTO.setName(cartLineItem.getProduct().getName());
         responseDTO.setUrlImage(cartLineItem.getProduct().getUrlImage());
         responseDTO.setPrice(cartLineItem.getProduct().getPrice());
+        responseDTO.setDiscount(cartLineItem.getProduct().getDiscount());
         return responseDTO;
     }
 
@@ -34,3 +35,4 @@ public class CartLineItemMapperImpl implements CartLineItemMapper {
         return cartLineItemResponseDTOS;
     }
 }
+
