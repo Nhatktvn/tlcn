@@ -28,7 +28,7 @@ public class Order {
     @Column(name = "total_price")
     private Double totalPrice;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vnPayInfo_id", referencedColumnName = "id")
     private VnPayInfo vnPayInfo;
 

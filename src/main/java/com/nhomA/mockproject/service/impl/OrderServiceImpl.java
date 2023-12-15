@@ -31,7 +31,9 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final StatusOrderRepository statusOrderRepository;
     private final VnPayMapper vnPayMapper;
-    public OrderServiceImpl(AddressRepository addressRepository, UserRepository userRepository, CartLineItemRepository cartLineItemRepository, OrderRepository orderRepository, OrderMapper orderMapper, StatusOrderRepository statusOrderRepository, VnPayMapper vnPayMapper) {
+    private final ProductRepository productRepository;
+
+    public OrderServiceImpl(AddressRepository addressRepository, UserRepository userRepository, CartLineItemRepository cartLineItemRepository, OrderRepository orderRepository, OrderMapper orderMapper, StatusOrderRepository statusOrderRepository, VnPayMapper vnPayMapper, ProductRepository productRepository) {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.cartLineItemRepository = cartLineItemRepository;
@@ -39,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
         this.orderMapper = orderMapper;
         this.statusOrderRepository = statusOrderRepository;
         this.vnPayMapper = vnPayMapper;
+        this.productRepository = productRepository;
     }
     @Transactional
     @Override
@@ -91,8 +94,17 @@ public class OrderServiceImpl implements OrderService {
 //        address.getOrders().add(order);
 //        addressRepository.save(address);
         orderRepository.save(order);
+
+        for(CartLineItem c: cartLineItems){
+            Long idProduct = c.getProduct().getId();
+            Optional<Product> existedProduct = productRepository.findById(idProduct);
+            Product product = existedProduct.get();
+            product.setAvailable(product.getAvailable() - c.getQuantity());
+            productRepository.save(product);
+        }
         return orderMapper.toResponseDTO(order);
     }
+    @Transactional
 
     @Override
     public OrderResponseDTO orderPaymentVnPay(String username, OrderPaymentVnPayDTO paymentVnPayDTO) {
@@ -130,11 +142,26 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
         user.getOrders().add(order);
 
-        VnPayInfo vnPayInfo = vnPayMapper.toEntity(paymentVnPayDTO);
+//        VnPayInfo vnPayInfo = vnPayMapper.toEntity(paymentVnPayDTO);
+//        order.setVnPayInfo(vnPayInfo);
+        VnPayInfo vnPayInfo = new VnPayInfo();
+        vnPayInfo.setVnpAmount(paymentVnPayDTO.getVnpAmount());
+        vnPayInfo.setVnpBankCode(paymentVnPayDTO.getVnpBankCode());
+        vnPayInfo.setVnpTransactionNo(paymentVnPayDTO.getVnpTransactionNo());
+        vnPayInfo.setVnpOrderInfo(paymentVnPayDTO.getVnpOrderInfo());
+        vnPayInfo.setVnpSecureHash(paymentVnPayDTO.getVnpSecureHash());
+        vnPayInfo.setVnpPayDate(paymentVnPayDTO.getVnpPayDate());
+        vnPayInfo.setVnpTxnRef(paymentVnPayDTO.getVnpTxnRef());
         order.setVnPayInfo(vnPayInfo);
-//        address.getOrders().add(order);
-//        addressRepository.save(address);
         orderRepository.save(order);
+
+        for(CartLineItem c: cartLineItems){
+            Long idProduct = c.getProduct().getId();
+            Optional<Product> existedProduct = productRepository.findById(idProduct);
+            Product product = existedProduct.get();
+            product.setAvailable(product.getAvailable() - c.getQuantity());
+            productRepository.save(product);
+        }
 
         return orderMapper.toResponseDTO(order);
     }
