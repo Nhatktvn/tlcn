@@ -1,5 +1,6 @@
 package com.nhomA.mockproject.controller;
 
+import com.nhomA.mockproject.dto.OrderPaymentVnPayDTO;
 import com.nhomA.mockproject.dto.OrderRequestDTO;
 import com.nhomA.mockproject.exception.CartLineItemNotFoundException;
 import com.nhomA.mockproject.service.OrderService;
@@ -11,6 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping
 public class OrderController {
@@ -19,6 +24,34 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
+
+//    @GetMapping("/vnpay/callback")
+//    public ResponseEntity<String> handleVnPayCallback(@RequestParam("infoName") String name) {
+//
+//    }
+    @PostMapping("/order/payment-vnPay")
+    public ResponseEntity<?> orderPaymentVnPay (Authentication authentication, @RequestBody OrderPaymentVnPayDTO paymentVnPayDTO){
+        String username = authentication.getName();
+        try{
+            return new ResponseEntity<> (orderService.orderPaymentVnPay(username,paymentVnPayDTO), HttpStatus.CREATED);
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        catch (CartLineItemNotFoundException ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception ex){
+            return new ResponseEntity<> (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/order")
     public ResponseEntity<?> order (Authentication authentication, @RequestBody OrderRequestDTO orderRequestDTO){
         String username = authentication.getName();

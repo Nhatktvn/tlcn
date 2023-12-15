@@ -7,6 +7,15 @@ public class OrderRequestDTO {
     private String name;
     private String phone;
 
+    @Override
+    public String toString() {
+        return "{" +
+                "addressId=" + addressId +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
+
     public Long getAddressId() {
         return addressId;
     }

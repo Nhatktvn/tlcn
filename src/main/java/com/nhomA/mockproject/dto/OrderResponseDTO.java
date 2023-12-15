@@ -4,17 +4,38 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public class OrderResponseDTO {
+    private Long Id;
     private AddressDTO address;
     private String name;
     private String phone;
     private ZonedDateTime deliveryTime;
     private double totalPrice;
     private String statusOrder;
+    private VnPayResponseDTO vnPayResponseDTO;
     private List<CartLineItemResponseDTO> cartLineItemResponseDTOs;
+
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public VnPayResponseDTO getVnPayResponseDTO() {
+        return vnPayResponseDTO;
+    }
+
+
+    public void setVnPayResponseDTO(VnPayResponseDTO vnPayResponseDTO) {
+        this.vnPayResponseDTO = vnPayResponseDTO;
+    }
 
     public String getStatusOrder() {
         return statusOrder;
     }
+
 
     public void setStatusOrder(String statusOrder) {
         this.statusOrder = statusOrder;

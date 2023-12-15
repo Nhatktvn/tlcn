@@ -1,11 +1,8 @@
 package com.nhomA.mockproject.controller;
 
 import com.nhomA.mockproject.config.VnPayConfig;
-import com.nhomA.mockproject.dto.PaymentVnPayDTO;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.nhomA.mockproject.dto.OrderRequestDTO;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -17,13 +14,14 @@ import java.util.*;
 @RequestMapping("/api/payment")
 public class VnPayController {
     @GetMapping("/pay")
-    public String getPay() throws UnsupportedEncodingException{
+    public String getPay(@RequestBody OrderRequestDTO orderRequestDTO,@RequestParam("totalPrice") double totalPrice ) throws UnsupportedEncodingException{
+
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long amount = 10000*100;
-        String bankCode = "NCB";
+        long amount = (long) (totalPrice*100);
+//        String bankCode = "ACB";
 
         String vnp_TxnRef = VnPayConfig.getRandomNumber(8);
         String vnp_IpAddr = "127.0.0.1";
@@ -37,13 +35,13 @@ public class VnPayController {
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
 
-        vnp_Params.put("vnp_BankCode", bankCode);
+//        vnp_Params.put("vnp_BankCode", bankCode);
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan hoa don: " + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vn");
-        vnp_Params.put("vnp_ReturnUrl", VnPayConfig.vnp_ReturnUrl);
+        vnp_Params.put("vnp_ReturnUrl", VnPayConfig.vnp_ReturnUrl + "?infoName=" + URLEncoder.encode(orderRequestDTO.getName()) + "&infoPhone=" +orderRequestDTO.getPhone());
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
