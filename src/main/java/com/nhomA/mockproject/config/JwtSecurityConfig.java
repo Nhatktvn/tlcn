@@ -26,7 +26,6 @@ public class JwtSecurityConfig {
     }
 
 
-
     @Bean
     AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -50,7 +49,7 @@ public class JwtSecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/registration").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user/**").hasRole("USER")
+                                .requestMatchers("/user/**","/api/payment/**").hasRole("USER")
                                 .requestMatchers("/cart/**","/identification/**","/change-password/**").authenticated()
                                 .anyRequest().permitAll()
                 ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

@@ -14,9 +14,11 @@ import java.util.*;
 @RequestMapping("/api/payment")
 public class VnPayController {
     @GetMapping("/pay")
-    public String getPay(@RequestBody OrderRequestDTO orderRequestDTO,@RequestParam("totalPrice") double totalPrice ) throws UnsupportedEncodingException{
-
-
+    public String getPay(@RequestParam("addressId") Long idAddress, @RequestParam("name") String name, @RequestParam("phone") String phone,@RequestParam("totalPrice") double totalPrice ) throws UnsupportedEncodingException{
+        OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
+        orderRequestDTO.setAddressId(idAddress);
+        orderRequestDTO.setName(name);
+        orderRequestDTO.setPhone(phone);
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
