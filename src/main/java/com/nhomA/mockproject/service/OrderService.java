@@ -12,6 +12,7 @@ public interface OrderService {
     OrderResponseDTO orderPaymentVnPay (String username, OrderPaymentVnPayDTO paymentVnPayDTO);
     List<OrderResponseDTO> getAllOrder (int pageNo, int pageSize, String sortBy, String sortDir);
     OrderResponseDTO setStatusOrder(Long orderId, Long statusOrderId);
+    List<OrderResponseDTO> getOrderByUser(String username);
 
     boolean cancelOrder(Long idOrder, String username);
 }

@@ -177,6 +177,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
+    public List<OrderResponseDTO> getOrderByUser(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        List<Order> orders = orderRepository.findByUserId(user.get().getId());
+        return orderMapper.toResponseDTOs(orders);
+    }
+    @Transactional
+    @Override
     public OrderResponseDTO setStatusOrder(Long orderId, Long statusOrderId) {
         Optional<Order> emptyOrder = orderRepository.findById(orderId);
         if(emptyOrder.isEmpty()){

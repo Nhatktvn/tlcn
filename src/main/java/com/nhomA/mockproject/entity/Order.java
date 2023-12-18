@@ -32,8 +32,6 @@ public class Order {
     @JoinColumn(name = "vnPayInfo_id", referencedColumnName = "id")
     private VnPayInfo vnPayInfo;
 
-    @Column(name = "txnRef_VnPay", unique = true)
-    private String txnRefVnPay;
     @OneToMany(mappedBy = "order",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.DETACH})
     private List<CartLineItem> cartLineItems;
     @ManyToOne(cascade = CascadeType.ALL)
@@ -45,13 +43,6 @@ public class Order {
     private User user;
 
 
-    public String getTxnRefVnPay() {
-        return txnRefVnPay;
-    }
-
-    public void setTxnRefVnPay(String txnRefVnPay) {
-        this.txnRefVnPay = txnRefVnPay;
-    }
 
     public VnPayInfo getVnPayInfo() {
         return vnPayInfo;

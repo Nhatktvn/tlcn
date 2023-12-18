@@ -29,6 +29,25 @@ public class OrderController {
 //    public ResponseEntity<String> handleVnPayCallback(@RequestParam("infoName") String name) {
 //
 //    }
+
+    @GetMapping("/user/orders")
+    public ResponseEntity<?> getOrderByUser(Authentication authentication){
+        try {
+            String username = authentication.getName();
+            return new ResponseEntity<>(orderService.getOrderByUser(username),HttpStatus.OK);
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }catch (Exception ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @PostMapping("/order/payment-vnPay")
     public ResponseEntity<?> orderPaymentVnPay (Authentication authentication, @RequestBody OrderPaymentVnPayDTO paymentVnPayDTO){
         String username = authentication.getName();
