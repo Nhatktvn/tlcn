@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByNameContaining(String nameProduct);
+    List<Product> findByNameContainingIgnoreCase(String nameProduct);
     List<Product> findByPriceBetween(double minPrice, double maxPrice);
     Page<Product> findByCategoryId(Long idCategory, Pageable pageable);
     List<Product> findByCategoryId(Long idCategory);

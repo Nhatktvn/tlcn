@@ -138,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public List<ProductResponseDTO> searchProduct(String searchName) {
-        List<Product> emptyProducts = productRepository.findByNameContaining(searchName);
+        List<Product> emptyProducts = productRepository.findByNameContainingIgnoreCase(searchName);
         if(emptyProducts.isEmpty()){
             throw new ProductNotFoundException("Product not found");
         }

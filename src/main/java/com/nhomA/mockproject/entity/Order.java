@@ -32,7 +32,7 @@ public class Order {
     @JoinColumn(name = "vnPayInfo_id", referencedColumnName = "id")
     private VnPayInfo vnPayInfo;
 
-    @OneToMany(mappedBy = "order",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.DETACH})
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<CartLineItem> cartLineItems;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "status_order", referencedColumnName = "id")

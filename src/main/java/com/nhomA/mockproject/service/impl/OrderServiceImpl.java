@@ -199,6 +199,12 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponseDTO(saveOrder);
     }
 
+    @Override
+    public OrderResponseDTO getDetailOrder(String username, Long orderId) {
+
+        return null;
+    }
+
     @Transactional
     @Override
     public boolean cancelOrder(Long idOrder, String username) {

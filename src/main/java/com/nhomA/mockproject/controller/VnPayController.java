@@ -99,24 +99,73 @@ public class VnPayController {
 
     @GetMapping("payment-callback")
     public void paymentCallback(@RequestParam Map<String, String> queryParams, HttpServletResponse response) throws IOException {
-        String username = queryParams.get("infoUsername");
-        String vnp_ResponseCode = queryParams.get("vnp_ResponseCode");
-        String vnp_Amount = queryParams.get("vnp_Amount");
-        String vnp_BankCode = queryParams.get("vnp_BankCode");
-        String vnp_TransactionNo = queryParams.get("vnp_TransactionNo");
-        String vnp_OrderInfo = queryParams.get("vnp_OrderInfo");
-        String vnp_SecureHash = queryParams.get("vnp_SecureHash");
-        String vnp_PayDate = queryParams.get("vnp_PayDate");
-        String vnp_TxnRef = queryParams.get("vnp_TxnRef");
-        String infoName = queryParams.get("infoName");
-        String infoPhone = queryParams.get("infoPhone");
-        Long infoAddressId = Long.valueOf(queryParams.get("infoAddressId"));
-        OrderPaymentVnPayDTO orderPaymentVnPayDTO = new OrderPaymentVnPayDTO(infoAddressId, infoName, infoPhone, vnp_Amount, vnp_BankCode, vnp_TransactionNo, vnp_OrderInfo, vnp_SecureHash, vnp_PayDate, vnp_TxnRef);
-        if ("00".equals(vnp_ResponseCode)) {
-            orderService.orderPaymentVnPay(username, orderPaymentVnPayDTO);
-            response.sendRedirect("http://localhost:3000/Home");
-        } else {
-            response.sendRedirect("http://localhost:3000/profile");
+    //            orderService.orderPaymentVnPay(username, orderPaymentVnPayDTO);
+        try
+        {
+            String username = queryParams.get("infoUsername");
+            String vnp_ResponseCode = queryParams.get("vnp_ResponseCode");
+            String vnp_Amount = queryParams.get("vnp_Amount");
+            String vnp_BankCode = queryParams.get("vnp_BankCode");
+            String vnp_TransactionNo = queryParams.get("vnp_TransactionNo");
+            String vnp_OrderInfo = queryParams.get("vnp_OrderInfo");
+            String vnp_SecureHash = queryParams.get("vnp_SecureHash");
+            String vnp_PayDate = queryParams.get("vnp_PayDate");
+            String vnp_TxnRef = queryParams.get("vnp_TxnRef");
+            String infoName = queryParams.get("infoName");
+            String infoPhone = queryParams.get("infoPhone");
+            Long infoAddressId = Long.valueOf(queryParams.get("infoAddressId"));
+            if (queryParams.containsKey("vnp_SecureHash"))
+            {
+                queryParams.remove("vnp_SecureHash");
+            }
+            queryParams.remove("infoUsername");
+            queryParams.remove("infoName");
+            queryParams.remove("infoPhone");
+            queryParams.remove("infoAddressId");
+//
+
+            List fieldNames = new ArrayList(queryParams.keySet());
+            Collections.sort(fieldNames);
+            StringBuilder hashData = new StringBuilder();
+            StringBuilder query = new StringBuilder();
+            Iterator itr = fieldNames.iterator();
+            while (itr.hasNext()) {
+                String fieldName = (String) itr.next();
+                String fieldValue = (String) queryParams.get(fieldName);
+                if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                    //Build hash data
+                    hashData.append(fieldName);
+                    hashData.append('=');
+                    hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                    //Build query
+                    query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
+                    query.append('=');
+                    query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                    if (itr.hasNext()) {
+                        query.append('&');
+                        hashData.append('&');
+                    }
+                }
+            }
+            String queryUrl = query.toString();
+            String hashCode = VnPayConfig.hmacSHA512(VnPayConfig.secretKey, hashData.toString());
+            if (hashCode.equals(vnp_SecureHash)) {
+                if ("00".equals(queryParams.get("vnp_ResponseCode"))) {
+                    OrderPaymentVnPayDTO orderPaymentVnPayDTO = new OrderPaymentVnPayDTO(infoAddressId, infoName, infoPhone, vnp_Amount, vnp_BankCode, vnp_TransactionNo, vnp_OrderInfo, vnp_SecureHash, vnp_PayDate, vnp_TxnRef);
+                    orderService.orderPaymentVnPay(username, orderPaymentVnPayDTO);
+                    response.sendRedirect("http://localhost:3000/payment/success");
+                } else {
+                    response.sendRedirect("http://localhost:3000/payment/failed");
+                }
+            }
+            else
+            {
+                response.sendRedirect("http://localhost:3000/payment/failed");
+            }
+        }
+        catch(Exception e)
+        {
+            response.sendRedirect("http://localhost:3000/payment/failed");
         }
     }
 }

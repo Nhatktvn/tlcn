@@ -17,7 +17,7 @@ public class VnPayInfo {
     private String vnpTransactionNo;
     @Column(name = "vnp_OrderInfo")
     private String vnpOrderInfo;
-    @Column(name = "vnp_SecureHash", length = -1)
+    @Column(name = "vnp_SecureHash", length = -1, unique = true)
     private String vnpSecureHash;
     @Column(name = "vnp_PayDate")
     private String vnpPayDate;

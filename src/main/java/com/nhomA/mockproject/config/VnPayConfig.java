@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,10 +16,10 @@ import java.util.*;
 public class VnPayConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_ReturnUrl = "http://localhost:8080/api/payment/payment-callback";
+//    public static String vnp_ReturnUrl = "http://localhost:8080/api/payme";
     public static String vnp_TmnCode = "J80K8KY7";
     public static String secretKey = "MPVSAPPOJPITBYPORGIKVSPRAVTNREOE";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-
     public static String md5(String message) {
         String digest = null;
         try {
@@ -76,9 +77,9 @@ public class VnPayConfig {
         return hmacSHA512(secretKey,sb.toString());
     }
 
+
     public static String hmacSHA512(final String key, final String data) {
         try {
-
             if (key == null || data == null) {
                 throw new NullPointerException();
             }
