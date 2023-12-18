@@ -30,6 +30,9 @@ public class OrderPaymentVnPayDTO {
         this.vnpTxnRef = vnpTxnRef;
     }
 
+    public OrderPaymentVnPayDTO(String infoAddressId, String infoName, String infoPhone, String vnpAmount, String vnpBankCode, String vnpTransactionNo, String vnpOrderInfo, String vnpSecureHash, String vnpPayDate, String vnpTxnRef) {
+    }
+
     public Long getAddressId() {
         return addressId;
     }

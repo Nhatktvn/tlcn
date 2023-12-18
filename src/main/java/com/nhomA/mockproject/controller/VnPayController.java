@@ -1,9 +1,14 @@
 package com.nhomA.mockproject.controller;
 
 import com.nhomA.mockproject.config.VnPayConfig;
+import com.nhomA.mockproject.dto.OrderPaymentVnPayDTO;
 import com.nhomA.mockproject.dto.OrderRequestDTO;
+import com.nhomA.mockproject.service.OrderService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -13,12 +18,19 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/payment")
 public class VnPayController {
+    private final OrderService orderService;
+
+    public VnPayController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
     @GetMapping("/pay")
-    public String getPay(@RequestParam("addressId") Long idAddress, @RequestParam("name") String name, @RequestParam("phone") String phone,@RequestParam("totalPrice") double totalPrice ) throws UnsupportedEncodingException{
+    public String getPay(Authentication authentication ,@RequestParam("addressId") Long idAddress, @RequestParam("name") String name, @RequestParam("phone") String phone,@RequestParam("totalPrice") double totalPrice ) throws UnsupportedEncodingException{
         OrderRequestDTO orderRequestDTO = new OrderRequestDTO();
         orderRequestDTO.setAddressId(idAddress);
         orderRequestDTO.setName(name);
         orderRequestDTO.setPhone(phone);
+        String username = authentication.getName();
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
@@ -43,7 +55,7 @@ public class VnPayController {
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vn");
-        vnp_Params.put("vnp_ReturnUrl", VnPayConfig.vnp_ReturnUrl + "?infoName=" + URLEncoder.encode(orderRequestDTO.getName()) + "&infoPhone=" +orderRequestDTO.getPhone());
+        vnp_Params.put("vnp_ReturnUrl", VnPayConfig.vnp_ReturnUrl + "?infoUsername=" +username + "&infoName=" + URLEncoder.encode(orderRequestDTO.getName()) + "&infoPhone=" +orderRequestDTO.getPhone() + "&infoAddressId=" +orderRequestDTO.getAddressId());
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -82,7 +94,29 @@ public class VnPayController {
         String vnp_SecureHash = VnPayConfig.hmacSHA512(VnPayConfig.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VnPayConfig.vnp_PayUrl + "?" + queryUrl;
-
         return paymentUrl;
+    }
+
+    @GetMapping("payment-callback")
+    public void paymentCallback(@RequestParam Map<String, String> queryParams, HttpServletResponse response) throws IOException {
+        String username = queryParams.get("infoUsername");
+        String vnp_ResponseCode = queryParams.get("vnp_ResponseCode");
+        String vnp_Amount = queryParams.get("vnp_Amount");
+        String vnp_BankCode = queryParams.get("vnp_BankCode");
+        String vnp_TransactionNo = queryParams.get("vnp_TransactionNo");
+        String vnp_OrderInfo = queryParams.get("vnp_OrderInfo");
+        String vnp_SecureHash = queryParams.get("vnp_SecureHash");
+        String vnp_PayDate = queryParams.get("vnp_PayDate");
+        String vnp_TxnRef = queryParams.get("vnp_TxnRef");
+        String infoName = queryParams.get("infoName");
+        String infoPhone = queryParams.get("infoPhone");
+        Long infoAddressId = Long.valueOf(queryParams.get("infoAddressId"));
+        OrderPaymentVnPayDTO orderPaymentVnPayDTO = new OrderPaymentVnPayDTO(infoAddressId, infoName, infoPhone, vnp_Amount, vnp_BankCode, vnp_TransactionNo, vnp_OrderInfo, vnp_SecureHash, vnp_PayDate, vnp_TxnRef);
+        if ("00".equals(vnp_ResponseCode)) {
+            orderService.orderPaymentVnPay(username, orderPaymentVnPayDTO);
+            response.sendRedirect("http://localhost:3000/Home");
+        } else {
+            response.sendRedirect("http://localhost:3000/profile");
+        }
     }
 }

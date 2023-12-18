@@ -49,7 +49,7 @@ public class JwtSecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/registration").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user/**","/api/payment/**").hasRole("USER")
+                                .requestMatchers("/user/**","/api/payment").hasRole("USER")
                                 .requestMatchers("/cart/**","/identification/**","/change-password/**").authenticated()
                                 .anyRequest().permitAll()
                 ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
