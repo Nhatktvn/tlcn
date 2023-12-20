@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/login")
+@RequestMapping("/api/login")
 @RestController
 public class LoginController {
 

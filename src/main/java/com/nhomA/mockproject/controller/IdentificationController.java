@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/user/identification")
+@RequestMapping("/api/user/identification")
 @CrossOrigin(origins = "http://localhost:3000")
 public class IdentificationController {
     private final IdentificationService identificationService;

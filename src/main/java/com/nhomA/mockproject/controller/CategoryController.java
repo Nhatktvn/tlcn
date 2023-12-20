@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 public class CategoryController {
     private final CategoryService categoryService;
     private final UploadFileService uploadFileService;

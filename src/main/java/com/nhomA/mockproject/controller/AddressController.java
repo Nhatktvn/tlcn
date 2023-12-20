@@ -13,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user/address")
+@RequestMapping("/api/user/address")
 public class AddressController {
     private final AddressService addressService;
 

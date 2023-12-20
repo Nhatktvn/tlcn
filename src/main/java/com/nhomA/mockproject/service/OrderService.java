@@ -16,4 +16,5 @@ public interface OrderService {
     List<OrderResponseDTO> getOrderByUser(String username);
 
     boolean cancelOrder(Long idOrder, String username);
+    boolean receivedProduct (Long idOrder, String username);
 }

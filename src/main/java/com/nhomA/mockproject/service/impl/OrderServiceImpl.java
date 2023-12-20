@@ -4,10 +4,7 @@ import com.nhomA.mockproject.dto.OrderPaymentVnPayDTO;
 import com.nhomA.mockproject.dto.OrderRequestDTO;
 import com.nhomA.mockproject.dto.OrderResponseDTO;
 import com.nhomA.mockproject.entity.*;
-import com.nhomA.mockproject.exception.AddressNotFoundException;
-import com.nhomA.mockproject.exception.CartLineItemNotFoundException;
-import com.nhomA.mockproject.exception.OrderNotFoundException;
-import com.nhomA.mockproject.exception.StatusOrderNotFoundException;
+import com.nhomA.mockproject.exception.*;
 import com.nhomA.mockproject.mapper.OrderMapper;
 import com.nhomA.mockproject.mapper.VnPayMapper;
 import com.nhomA.mockproject.repository.*;
@@ -194,6 +191,9 @@ public class OrderServiceImpl implements OrderService {
             throw new StatusOrderNotFoundException("Cart line item not found!");
         }
         Order order = emptyOrder.get();
+        if (order.getStatusOrder().getId() == 6){
+            throw new StatusOrderOnChangeException("Not Change, Status current is Da Huy");
+        }
         order.setStatusOrder(emptyStatusOrder.get());
         Order saveOrder = orderRepository.save(order);
         return orderMapper.toResponseDTO(saveOrder);
@@ -208,7 +208,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public boolean cancelOrder(Long idOrder, String username) {
-        Optional<Order> existedOrder = orderRepository.findById(idOrder);
+        Optional<User> existedUser = userRepository.findByUsername(username);
+        Optional<Order> existedOrder = orderRepository.findByIdAndUserId(idOrder, existedUser.get().getId());
         if(existedOrder.isEmpty()){
             throw new OrderNotFoundException("Order not found!");
         }
@@ -220,6 +221,24 @@ public class OrderServiceImpl implements OrderService {
             Order saveOrder = orderRepository.save(order);
             return true;
         }
-        return false;
+        throw new StatusOrderOnChangeException("Not Cancel, Status current is " + order.getStatusOrder().getName());
+    }
+
+    @Override
+    public boolean receivedProduct(Long idOrder, String username) {
+        Optional<User> existedUser = userRepository.findByUsername(username);
+        Optional<Order> existedOrder = orderRepository.findByIdAndUserId(idOrder, existedUser.get().getId());
+        if(existedOrder.isEmpty()){
+            throw new OrderNotFoundException("Order not found!");
+        }
+        Order order = existedOrder.get();
+        Long idStatusCurrent = order.getStatusOrder().getId();
+        if(idStatusCurrent == 4) {
+            Optional<StatusOrder> emptyStatusOrder = statusOrderRepository.findById(5L);
+            order.setStatusOrder(emptyStatusOrder.get());
+            Order saveOrder = orderRepository.save(order);
+            return true;
+        }
+        throw new StatusOrderOnChangeException("Not Change, Status current is " + order.getStatusOrder().getName());
     }
 }

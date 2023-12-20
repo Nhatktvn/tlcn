@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 public class OrderController {
     private final OrderService orderService;
 
@@ -138,6 +138,25 @@ public class OrderController {
         try {
             String username = authentication.getName();
             return new ResponseEntity<>(orderService.cancelOrder(id, username),HttpStatus.OK);
+        }
+        catch (AuthenticationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (ExpiredJwtException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+        catch (AccessDeniedException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+        }catch (Exception ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/user/received-order")
+    public ResponseEntity<?> receivedOrder(Authentication authentication,@RequestParam("id") Long id){
+        try {
+            String username = authentication.getName();
+            return new ResponseEntity<>(orderService.receivedProduct(id, username),HttpStatus.OK);
         }
         catch (AuthenticationException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);

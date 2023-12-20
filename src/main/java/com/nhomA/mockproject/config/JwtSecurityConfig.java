@@ -45,12 +45,12 @@ public class JwtSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorization -> authorization
-                                .requestMatchers("/home").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/registration").permitAll()
+                                .requestMatchers("/api/home").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/registration").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user/**","/api/payment").hasRole("USER")
-                                .requestMatchers("/cart/**","/identification/**","/change-password/**").authenticated()
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/user/**","/api/payment").hasRole("USER")
+                                .requestMatchers("/api/cart/**","/api/identification/**","/api/change-password/**").authenticated()
                                 .anyRequest().permitAll()
                 ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

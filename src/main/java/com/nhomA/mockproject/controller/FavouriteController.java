@@ -13,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user/favourite")
+@RequestMapping("/api/user/favourite")
 public class FavouriteController {
     private final FavouriteService favouriteService;
 
